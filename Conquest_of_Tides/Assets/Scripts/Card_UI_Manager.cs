@@ -82,12 +82,6 @@ public class Card_UI_Manager : MonoBehaviour
     {
         instance = this;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void PopupCard(int card_id)
     {
         Card_Manager.Card card = Card_Manager.instance.GetCardByID(card_id); 

@@ -6,9 +6,11 @@ public class Player_Input : MonoBehaviour
 {
     public bool hovering;
     public int card_id;
+    public Card_Manager.Card this_card;
     // Start is called before the first frame update
     void Start()
     {
+        this_card = Card_Manager.instance.GetCardByID(card_id);
     }
 
     // Update is called once per frame

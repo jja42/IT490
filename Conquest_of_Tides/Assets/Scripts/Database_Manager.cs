@@ -5,7 +5,7 @@ using UnityEngine;
 public class Database_Manager : MonoBehaviour
 {
     public static Database_Manager instance;
-    public Card_Manager.Card[] Database;
+    public List<Card_Manager.Card> Database;
     // Start is called before the first frame update
     void Start()
     {

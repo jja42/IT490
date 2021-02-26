@@ -4662,7 +4662,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ffea9a020a0f5043bb09a821707aa44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: 
 --- !u!4 &1341472437
 Transform:
   m_ObjectHideFlags: 0
@@ -4739,6 +4738,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4617bf9d572022741a5acf268a38971d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Player_Hand: {fileID: 1660583421}
+  Opponent_Hand: {fileID: 1322879272}
 --- !u!114 &1341472440
 MonoBehaviour:
   m_ObjectHideFlags: 0

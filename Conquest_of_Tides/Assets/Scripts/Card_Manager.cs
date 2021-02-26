@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class Card_Manager : MonoBehaviour
 {
-    //path to file
-    public string path;
+
     public enum Type:int{
         None = 0,
         Ironclad = 1,
@@ -71,12 +70,12 @@ public class Card_Manager : MonoBehaviour
     public struct Deck
     {
         public int id;
-        public Card[] cards;
+        public List<Card> cards;
         public string name;
     }
     public struct Hand
     {
-        public Card[] cards;
+        public List<Card> cards;
         //0 if player, 1 if opponent
         public int owner;
     }
@@ -140,5 +139,19 @@ public class Card_Manager : MonoBehaviour
                 return Type.Cruiser;
         }
         return Type.None;
+    }
+    public void ShuffleDeck(Deck deck)
+    {
+
+    }
+
+    public void DrawfromDeck(Deck deck,Hand hand)
+    {
+        if (deck.cards.Count > 0) { 
+        int index = hand.cards.Count;
+        hand.cards[index] = deck.cards[0];
+        deck.cards.RemoveAt(0);
+        General_UI_Manager.instance.ArrangeHand(hand);
+        }
     }
 }
