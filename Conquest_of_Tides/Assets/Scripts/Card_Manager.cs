@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Card_Manager : MonoBehaviour
 {
-
+    string path;
     public enum Type:int{
         None = 0,
         Ironclad = 1,
@@ -29,7 +29,7 @@ public class Card_Manager : MonoBehaviour
     }
     public struct Card
     {
-        public int id;
+        public int card_id;
         public string name;
         public CardType card_type;
         public Type type;
@@ -46,25 +46,25 @@ public class Card_Manager : MonoBehaviour
         public string move_cost_2;
         public string reposition_cost;
         public string flavor_text;
-        public Card(int card_id)
+        public Card(int card_id, string name, CardType card_type, Type type, int hp, string ability_name, string ability_description, string move_name_1, string move_description_1, int move_damage_1, string move_cost_1, string move_name_2, string move_description_2, int move_damage_2, string move_cost_2, string reposition_cost, string flavor_text)
         {
-            id = card_id;
-            name = "test";
-            card_type = CardType.Reinforcement;
-            type = Type.Galleon;
-            hp = 100;
-            ability_name = "test_ability";
-            ability_description = "Example Description for Ability";
-            move_name_1 = "test move # 1";
-            move_description_1 = "Example Description Reinforcement";
-            move_damage_1 = 40;
-            move_cost_1 = "1120";
-            move_name_2 = "test move # 2";
-            move_description_2 = "Example Description for Move 2";
-            move_damage_2 = 80;
-            move_cost_2 = "1500";
-            reposition_cost = "1100";
-            flavor_text = "Example Card LMAO";
+            this.card_id = card_id;
+            this.name = name;
+            this.card_type = card_type;
+            this.type = type;
+            this.hp = hp;
+            this.ability_name = ability_name;
+            this.ability_description = ability_description;
+            this.move_name_1 = move_name_1;
+            this.move_description_1 = move_description_1;
+            this.move_damage_1 = move_damage_1;
+            this.move_cost_1 = move_cost_1;
+            this.move_name_2 = move_name_2;
+            this.move_description_2 = move_description_2;
+            this.move_damage_2 = move_damage_2;
+            this.move_cost_2 = move_cost_2;
+            this.reposition_cost = reposition_cost;
+            this.flavor_text = flavor_text;
         }
     }
     public struct Deck
@@ -72,12 +72,23 @@ public class Card_Manager : MonoBehaviour
         public int id;
         public List<Card> cards;
         public string name;
+        public Deck(int id, string name)
+        {
+            this.id = id;
+            this.cards = new List<Card>();
+            this.name = name;
+        }
     }
     public struct Hand
     {
         public List<Card> cards;
         //0 if player, 1 if opponent
         public int owner;
+        public Hand(int owner)
+        {
+            this.owner = owner;
+            this.cards = new List<Card>();
+        }
     }
     public static Card_Manager instance;
     // Start is called before the first frame update
@@ -86,14 +97,9 @@ public class Card_Manager : MonoBehaviour
         instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public Card GetCardByID(int card_id)
     {
-        Card card = new Card(card_id);
+        Card card = Database_Manager.instance.GetCard(card_id);
         return card;
     }
     public Type Get_Weakness(Type type)
@@ -142,16 +148,35 @@ public class Card_Manager : MonoBehaviour
     }
     public void ShuffleDeck(Deck deck)
     {
+        for (int i = 0; i < deck.cards.Count; i++)
+        {
+            Card temp = deck.cards[i];
+            int randomIndex = Random.Range(i, deck.cards.Count);
+            deck.cards[i] = deck.cards[randomIndex];
+            deck.cards[randomIndex] = temp;
+        }
 
     }
 
     public void DrawfromDeck(Deck deck,Hand hand)
     {
-        if (deck.cards.Count > 0) { 
-        int index = hand.cards.Count;
-        hand.cards[index] = deck.cards[0];
+        if (deck.cards.Count > 0) {
+        hand.cards.Add(deck.cards[0]);
+        path = "temp_prefabs/Card";
+        GameObject obj = Resources.Load<GameObject>(path);
+        Instantiate(obj, General_UI_Manager.instance.Player_Hand.transform);
+        obj.GetComponent<Player_Input>().card_id = deck.cards[0].card_id;
         deck.cards.RemoveAt(0);
         General_UI_Manager.instance.ArrangeHand(hand);
         }
     }
+    public void GenerateDeck(Deck deck)
+    {
+       for(int i = 0; i< Database_Manager.instance.Database.Count; i++)
+        {
+            deck.cards.Add(Database_Manager.instance.Database[i]);
+        }
+        ShuffleDeck(deck);
+    }
+
 }

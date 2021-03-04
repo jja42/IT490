@@ -15,6 +15,9 @@ public class General_UI_Manager : MonoBehaviour
     void Start()
     {
         instance = this;
+        Player_Hand_Cards = new List<GameObject>();
+        Hand_left = Player_Hand.transform.position;
+        Hand_right = Hand_left + new Vector3(13.5f, 0, 0);
     }
     public void ArrangeHand(Card_Manager.Hand hand)
     {
@@ -23,8 +26,9 @@ public class General_UI_Manager : MonoBehaviour
         {
             Player_Hand_Cards.Add(Player_Hand.transform.GetChild(i).gameObject);
         }
-        Delta = Hand_left - Hand_right;
-        Delta /= hand.cards.Count - 1;
+        Delta = Hand_right - Hand_left;
+        if(hand.cards.Count > 1)
+            Delta /= hand.cards.Count - 1;
         for (int index = 0; index < hand.cards.Count; index++)
         {
             Player_Hand_Cards[index].transform.position = Hand_left + (Delta * index);

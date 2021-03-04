@@ -109,7 +109,7 @@ public class Card_UI_Manager : MonoBehaviour
     public void Setup_Ship(Card_Manager.Card card)
     {
         //set card image
-        path = "temp_assets/" + card.id.ToString();
+        path = "temp_assets/" + card.card_id.ToString();
         Card_Image.sprite = Resources.Load<Sprite>(path);
         Card_Image.rectTransform.anchoredPosition = new Vector3(0.2405f, 77.64047f, 0f);
         //set card back
@@ -202,7 +202,7 @@ public class Card_UI_Manager : MonoBehaviour
     public void Setup_Reinforcement(Card_Manager.Card card)
     {
         //set card image
-        path = "temp_assets/" + card.id.ToString();
+        path = "temp_assets/" + card.card_id.ToString();
         Card_Image.sprite = Resources.Load<Sprite>(path);
         Card_Image.rectTransform.anchoredPosition = new Vector3(0.2405f, 65,0f);
         //set card back
