@@ -10,6 +10,7 @@ public class General_UI_Manager : MonoBehaviour
     public GameObject Player_Bench;
     List<GameObject> Player_Hand_Cards;
     List<GameObject> Player_Bench_Cards;
+    List<GameObject> Card_Fortifications;
     //public GameObject Opponent_Hand;
     //List<GameObject> Opponent_Hand_Cards;
     public GameObject Attachment_UI;
@@ -23,6 +24,7 @@ public class General_UI_Manager : MonoBehaviour
         instance = this;
         Player_Hand_Cards = new List<GameObject>();
         Player_Bench_Cards = new List<GameObject>();
+        Card_Fortifications = new List<GameObject>();
         Hand_left = Player_Hand.transform.position;
         Hand_right = Hand_left + new Vector3(13.5f, 0, 0);
         Bench_left = Player_Bench.transform.position + new Vector3(-4.5f, 0, 0);
@@ -75,9 +77,19 @@ public class General_UI_Manager : MonoBehaviour
     {
         Fortification.transform.parent = Ship.transform;
         ArrangeFortifications(Ship);
+        Attachment_UI.SetActive(false);
     }
     public void ArrangeFortifications(GameObject Ship)
     {
-
+        Card_Fortifications.Clear();
+        for (int i = 0; i < Ship.transform.childCount; i++)
+        {
+            Card_Fortifications.Add(Ship.transform.GetChild(i).gameObject);
+        }
+        Delta = new Vector3(0.25f,0, 1);
+        for (int index = 0; index < Card_Fortifications.Count; index++)
+        {
+            Card_Fortifications[index].transform.position = Ship.transform.position + (Delta * (index+1));
+        }
     }
 }

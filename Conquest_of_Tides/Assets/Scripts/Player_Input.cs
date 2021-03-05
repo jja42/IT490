@@ -17,7 +17,8 @@ public class Player_Input : MonoBehaviour
         this_card = Card_Manager.instance.GetCardByID(card_id);
         spriteRenderer = GetComponent<SpriteRenderer>();
         if(this_card.card_type == Card_Manager.CardType.Ship)
-            spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/" + this_card.card_id.ToString());
+            spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/Ship_type_" + (int)this_card.type);
+            //spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/" + this_card.card_id.ToString());
         if (this_card.card_type == Card_Manager.CardType.Fortification)
             spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/Fortification_card_" + (int)this_card.type);
     }
