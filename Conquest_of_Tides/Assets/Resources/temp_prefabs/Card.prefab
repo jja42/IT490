@@ -98,6 +98,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hovering: 0
   card_id: 1002
+  active: 0
+  bench: 0
+  attached: 0
 --- !u!61 &4412191093450227931
 BoxCollider2D:
   m_ObjectHideFlags: 0

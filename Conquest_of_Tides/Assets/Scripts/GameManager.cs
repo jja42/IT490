@@ -8,11 +8,21 @@ public class GameManager : MonoBehaviour
     public Card_Manager.Deck player_deck;
     public Card_Manager.Hand player_hand;
     bool generated;
+    public bool active_set;
+    public bool full_bench;
+    public int bench_count;
+    public GameObject Selected_Fortification;
+    public GameObject Selected_Ship;
+    public bool selecting;
     // Start is called before the first frame update
     void Awake()
     {
         instance = this;
         generated = false;
+        active_set = false;
+        full_bench = false;
+        bench_count = 0;
+        selecting = false;
     }
 
     // Update is called once per frame
@@ -25,6 +35,20 @@ public class GameManager : MonoBehaviour
             Database_Manager.instance.GenerateDatabase();
             Card_Manager.instance.GenerateDeck(player_deck);
             generated = true;
+            for (int i = 0; i < 7; i++)
+            {
+                DrawCard();
+            }
+        }
+        if (selecting)
+        {
+            if(Selected_Fortification != null && Selected_Ship != null)
+            {
+                AttachFortification(Selected_Fortification,Selected_Ship);
+                selecting = false;
+                Selected_Fortification = null;
+                Selected_Ship = null;
+            }
         }
     }
     public void PopupCard(int card_id)
@@ -42,5 +66,26 @@ public class GameManager : MonoBehaviour
     public void DrawCard()
     {
         Card_Manager.instance.DrawfromDeck(player_deck,player_hand);
+    }
+    public void SetActiveZone(GameObject obj)
+    {
+        active_set = true;
+        General_UI_Manager.instance.MoveToActiveZone(obj);
+    }
+    public void SetBench(GameObject obj)
+    {
+        bench_count++;
+        if(bench_count > 5)
+        {
+            full_bench = true;
+        }
+        else
+        {
+            General_UI_Manager.instance.MoveToBench(obj);
+        }
+    }
+    public void AttachFortification(GameObject Fortification, GameObject Ship)
+    {
+        General_UI_Manager.instance.AttachFortification(Fortification,Ship);
     }
 }
