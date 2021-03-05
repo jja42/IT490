@@ -11,6 +11,7 @@ public class Player_Input : MonoBehaviour
     public bool bench;
     public bool attached;
     SpriteRenderer spriteRenderer;
+    public string attached_fortifications;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,22 +22,33 @@ public class Player_Input : MonoBehaviour
             //spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/" + this_card.card_id.ToString());
         if (this_card.card_type == Card_Manager.CardType.Fortification)
             spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/Fortification_card_" + (int)this_card.type);
+        attached_fortifications = "";
     }
 
     // Update is called once per frame
     void Update()
     {
         //MoveWithMouse();
-        if (hovering)
+        if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
         {
             if (Input.GetMouseButtonDown(0))
             {
                 if (this_card.card_type == Card_Manager.CardType.Ship)
                 {
+                    if (active && GameManager.instance.can_retreat && !GameManager.instance.repositioning && !GameManager.instance.attaching)
+                    {
+                        GameManager.instance.Selection_1 = this.gameObject;
+                        GameManager.instance.repositioning = true;
+                    }
+                    if (GameManager.instance.repositioning && bench)
+                    {
+                        GameManager.instance.Selection_2 = this.gameObject;
+                    }
                     if (!GameManager.instance.active_set && !active && !bench)
                     {
                         GameManager.instance.SetActiveZone(this.gameObject);
                         active = true;
+                        GameManager.instance.player_hand.cards.Remove(this_card);
                     }
                     else
                     {
@@ -44,23 +56,32 @@ public class Player_Input : MonoBehaviour
                         {
                             GameManager.instance.SetBench(this.gameObject);
                             bench = true;
+                            GameManager.instance.player_hand.cards.Remove(this_card);
                         }
                     }
-                    if (GameManager.instance.selecting && (bench||active))
+                    if (GameManager.instance.attaching && (bench || active))
                     {
-                        GameManager.instance.Selected_Ship = this.gameObject;
+                        GameManager.instance.Selection_2 = this.gameObject;
                     }
                 }
-                if(this_card.card_type == Card_Manager.CardType.Fortification)
+                if (this_card.card_type == Card_Manager.CardType.Fortification)
                 {
-                    if (!GameManager.instance.selecting && !attached)
+                    if (!GameManager.instance.attaching && !attached && GameManager.instance.can_attach)
                     {
-                        GameManager.instance.selecting = true;
+                        GameManager.instance.attaching = true;
                         General_UI_Manager.instance.EnableAttachmentUI();
-                        GameManager.instance.Selected_Fortification = this.gameObject;
+                        GameManager.instance.Selection_1 = this.gameObject;
                         attached = true;
+                        GameManager.instance.player_hand.cards.Remove(this_card);
                     }
                 }
+            }
+        }
+        if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
+        {
+            if (GameManager.instance.can_attack && active)
+            {
+                GameManager.instance.AttackInitiate();
             }
         }
     }

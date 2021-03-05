@@ -11,9 +11,15 @@ public class GameManager : MonoBehaviour
     public bool active_set;
     public bool full_bench;
     public int bench_count;
-    public GameObject Selected_Fortification;
-    public GameObject Selected_Ship;
-    public bool selecting;
+    public GameObject Selection_1;
+    public GameObject Selection_2;
+    public bool attaching;
+    public bool repositioning;
+    public bool can_draw;
+    public bool can_attach;
+    public bool can_retreat;
+    public bool can_attack;
+    string str;
     // Start is called before the first frame update
     void Awake()
     {
@@ -22,7 +28,7 @@ public class GameManager : MonoBehaviour
         active_set = false;
         full_bench = false;
         bench_count = 0;
-        selecting = false;
+        attaching = false;
     }
 
     // Update is called once per frame
@@ -35,20 +41,50 @@ public class GameManager : MonoBehaviour
             Database_Manager.instance.GenerateDatabase();
             Card_Manager.instance.GenerateDeck(player_deck);
             generated = true;
+        }
+        if (attaching)
+        {
+            if(Selection_1 != null && Selection_2 != null)
+            {
+                AttachFortification(Selection_1,Selection_2);
+                attaching = false;
+                Selection_1 = null;
+                Selection_2 = null;
+            }
+        }
+        if (repositioning)
+        {
+            if (Selection_1 != null && Selection_2 != null)
+            {
+                Reposition(Selection_1, Selection_2);
+                repositioning = false;
+                Selection_1 = null;
+                Selection_2 = null;
+            }
+        }
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Start)
+        {
             for (int i = 0; i < 7; i++)
             {
                 DrawCard();
             }
+            can_attach = true;
+            can_retreat = true;
+            Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
         }
-        if (selecting)
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
         {
-            if(Selected_Fortification != null && Selected_Ship != null)
-            {
-                AttachFortification(Selected_Fortification,Selected_Ship);
-                selecting = false;
-                Selected_Fortification = null;
-                Selected_Ship = null;
-            }
+            can_attach = true;
+            can_retreat = true;
+        }
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+        {
+            can_attack = true;
+        }
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.End)
+        {
+            can_draw = true;
+            Turn_Manager.instance.currState = Turn_Manager.TurnState.Draw;
         }
     }
     public void PopupCard(int card_id)
@@ -66,6 +102,8 @@ public class GameManager : MonoBehaviour
     public void DrawCard()
     {
         Card_Manager.instance.DrawfromDeck(player_deck,player_hand);
+        if(Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+            Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
     }
     public void SetActiveZone(GameObject obj)
     {
@@ -86,6 +124,36 @@ public class GameManager : MonoBehaviour
     }
     public void AttachFortification(GameObject Fortification, GameObject Ship)
     {
+        can_attach = false;
+        str = "" + (int)Fortification.GetComponent<Player_Input>().this_card.type;
+        Ship.GetComponent<Player_Input>().attached_fortifications += str;
         General_UI_Manager.instance.AttachFortification(Fortification,Ship);
+    }
+    public void DeckButton()
+    {
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+        {
+            DrawCard();
+            return;
+        }
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
+        {
+            Turn_Manager.instance.currState = Turn_Manager.TurnState.Combat;
+            return;
+        }
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
+        {
+            Turn_Manager.instance.currState = Turn_Manager.TurnState.End;
+            return;
+        }
+    }
+    public void AttackInitiate()
+    {
+
+    }
+    public void Reposition(GameObject ActiveShip, GameObject BenchShip)
+    {
+        can_retreat = false;
+        General_UI_Manager.instance.Reposition(ActiveShip, BenchShip);
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class General_UI_Manager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class General_UI_Manager : MonoBehaviour
     Vector3 Bench_left;
     Vector3 Bench_right;
     Vector3 Delta;
+    public Text TurnPhase;
     void Start()
     {
         instance = this;
@@ -63,6 +65,7 @@ public class General_UI_Manager : MonoBehaviour
     public void MoveToActiveZone(GameObject obj)
     {
         obj.transform.position = Player_Active.transform.position;
+        obj.transform.parent = Player_Active.transform;
     }
     public void MoveToBench(GameObject obj)
     {
@@ -91,5 +94,14 @@ public class General_UI_Manager : MonoBehaviour
         {
             Card_Fortifications[index].transform.position = Ship.transform.position + (Delta * (index+1));
         }
+    }
+    public void Reposition(GameObject ActiveShip, GameObject BenchShip)
+    {
+        MoveToActiveZone(BenchShip);
+        MoveToBench(ActiveShip);
+    }
+    public void SetPhase()
+    {
+        TurnPhase.text = Turn_Manager.instance.currState.ToString() + " Phase";
     }
 }

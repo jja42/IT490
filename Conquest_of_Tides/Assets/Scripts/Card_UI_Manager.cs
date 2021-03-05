@@ -121,17 +121,22 @@ public class Card_UI_Manager : MonoBehaviour
         //set card hp
         Card_HP.text = card.hp.ToString() + "HP";
         //set card ability
-        if(card.ability_name == "None")
-        {
-            Ability.SetActive(false);
-        }
-        else
-        {
-            Ability.SetActive(true);
-            Ability_Name.text = card.ability_name;
-            Ability_Text.text = card.ability_description;
-        }
+
+        Ability.SetActive(false); //trim ability for now
+
+        //if(card.ability_name == "None")
+        //{
+        //    Ability.SetActive(false);
+        //}
+        //else
+        //{
+        //    Ability.SetActive(true);
+        //    Ability_Name.text = card.ability_name;
+        //    Ability_Text.text = card.ability_description;
+        //}
+
         //set move 1
+        Move_1.SetActive(true);
         Move_Name_1.text = card.move_name_1;
         Move_Text_1.text = card.move_description_1;
         Move_Text_1.rectTransform.anchoredPosition = new Vector3(-5.3f, -63.32768f, 0);
@@ -146,26 +151,30 @@ public class Card_UI_Manager : MonoBehaviour
         path = "temp_assets/Fortification_type_" + card.move_cost_1[3].ToString();
         Move_1_Cost_4.sprite = Resources.Load<Sprite>(path);
         //set move 2
-        if (card.move_name_2 == "None")
-        {
-            Move_2.SetActive(false);
-        }
-        else
-        {
-            Move_2.SetActive(true);
-            Move_Name_2.text = card.move_name_2;
-            Move_Text_2.text = card.move_description_2;
-            Move_Damage_2.text = card.move_damage_2.ToString();
-            path = "temp_assets/Fortification_type_" + card.move_cost_2[0].ToString();
-            Move_2_Cost_1.sprite = Resources.Load<Sprite>(path);
-            path = "temp_assets/Fortification_type_" + card.move_cost_2[1].ToString();
-            Move_2_Cost_2.sprite = Resources.Load<Sprite>(path);
-            path = "temp_assets/Fortification_type_" + card.move_cost_2[2].ToString();
-            Move_2_Cost_3.sprite = Resources.Load<Sprite>(path);
-            path = "temp_assets/Fortification_type_" + card.move_cost_2[3].ToString();
-            Move_2_Cost_4.sprite = Resources.Load<Sprite>(path);
-        }
+
+        Move_2.SetActive(false); //trim move 2 for now
+        
+        //if (card.move_name_2 == "None")
+        //{
+        //    Move_2.SetActive(false);
+        //}
+        //else
+        //{
+        //    Move_2.SetActive(true);
+        //    Move_Name_2.text = card.move_name_2;
+        //    Move_Text_2.text = card.move_description_2;
+        //    Move_Damage_2.text = card.move_damage_2.ToString();
+        //    path = "temp_assets/Fortification_type_" + card.move_cost_2[0].ToString();
+        //    Move_2_Cost_1.sprite = Resources.Load<Sprite>(path);
+        //    path = "temp_assets/Fortification_type_" + card.move_cost_2[1].ToString();
+        //    Move_2_Cost_2.sprite = Resources.Load<Sprite>(path);
+        //    path = "temp_assets/Fortification_type_" + card.move_cost_2[2].ToString();
+        //    Move_2_Cost_3.sprite = Resources.Load<Sprite>(path);
+        //    path = "temp_assets/Fortification_type_" + card.move_cost_2[3].ToString();
+        //    Move_2_Cost_4.sprite = Resources.Load<Sprite>(path);
+        //}
         //set weakness
+        Weakness.SetActive(true);
         path = "temp_assets/Fortification_type_" + (int)Card_Manager.instance.Get_Weakness(card.type);
         Weakness_Img.sprite = Resources.Load<Sprite>(path);
         Weakness_Text.text = "+20";
@@ -197,7 +206,8 @@ public class Card_UI_Manager : MonoBehaviour
             Reposition_Cost_4.sprite = Resources.Load<Sprite>(path);
         }
         //set flavor text
-        Flavor_Text.text = card.flavor_text;
+        Flavor_Text.text = ""; //trim Flavor text for now
+        //Flavor_Text.text = card.flavor_text;
     }
     public void Setup_Reinforcement(Card_Manager.Card card)
     {
