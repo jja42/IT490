@@ -12,6 +12,7 @@ public class Player_Input : MonoBehaviour
     public bool attached;
     SpriteRenderer spriteRenderer;
     public string attached_fortifications;
+    public int owner;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +38,7 @@ public class Player_Input : MonoBehaviour
                 {
                     if (active && GameManager.instance.can_retreat && !GameManager.instance.repositioning && !GameManager.instance.attaching)
                     {
+                        General_UI_Manager.instance.EnableRepositionUI();
                         GameManager.instance.Selection_1 = this.gameObject;
                         GameManager.instance.repositioning = true;
                     }
@@ -79,9 +81,12 @@ public class Player_Input : MonoBehaviour
         }
         if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
         {
-            if (GameManager.instance.can_attack && active)
+            if (Input.GetMouseButtonDown(0))
             {
-                GameManager.instance.AttackInitiate();
+                if (GameManager.instance.can_attack && active)
+                {
+                    GameManager.instance.AttackInitiate(this_card);
+                }
             }
         }
     }

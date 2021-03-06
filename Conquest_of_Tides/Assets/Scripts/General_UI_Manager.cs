@@ -15,6 +15,9 @@ public class General_UI_Manager : MonoBehaviour
     //public GameObject Opponent_Hand;
     //List<GameObject> Opponent_Hand_Cards;
     public GameObject Attachment_UI;
+    public GameObject Reposition_UI;
+    public GameObject Attack_UI;
+    public Text Attack_Text;
     Vector3 Hand_left;
     Vector3 Hand_right;
     Vector3 Bench_left;
@@ -76,6 +79,19 @@ public class General_UI_Manager : MonoBehaviour
     {
         Attachment_UI.SetActive(true);
     }
+    public void EnableRepositionUI()
+    {
+        Reposition_UI.SetActive(true);
+    }
+    public void EnableAttack_UI(Card_Manager.Card card)
+    {
+        Attack_UI.SetActive(true);
+        Attack_Text.text = "Would you like to\n Attack with\n " + card.move_name_1 + "?";
+    }
+    public void DisableAttack_UI()
+    {
+        Attack_UI.SetActive(false);
+    }
     public void AttachFortification(GameObject Fortification, GameObject Ship)
     {
         Fortification.transform.parent = Ship.transform;
@@ -98,7 +114,12 @@ public class General_UI_Manager : MonoBehaviour
     public void Reposition(GameObject ActiveShip, GameObject BenchShip)
     {
         MoveToActiveZone(BenchShip);
+        BenchShip.GetComponent<Player_Input>().bench = false;
+        BenchShip.GetComponent<Player_Input>().active = true;
         MoveToBench(ActiveShip);
+        ActiveShip.GetComponent<Player_Input>().bench = true;
+        ActiveShip.GetComponent<Player_Input>().active = false;
+        Reposition_UI.SetActive(false);
     }
     public void SetPhase()
     {

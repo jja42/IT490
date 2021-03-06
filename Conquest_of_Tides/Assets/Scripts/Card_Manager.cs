@@ -166,6 +166,7 @@ public class Card_Manager : MonoBehaviour
         GameObject obj = Resources.Load<GameObject>(path);
         Instantiate(obj, General_UI_Manager.instance.Player_Hand.transform);
         obj.GetComponent<Player_Input>().card_id = deck.cards[0].card_id;
+        obj.GetComponent<Player_Input>().owner = 0;
         deck.cards.RemoveAt(0);
         General_UI_Manager.instance.ArrangeHand(hand);
         }

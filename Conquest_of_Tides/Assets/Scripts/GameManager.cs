@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
             can_attach = true;
             can_retreat = true;
         }
-        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
         {
             can_attack = true;
         }
@@ -147,13 +147,17 @@ public class GameManager : MonoBehaviour
             return;
         }
     }
-    public void AttackInitiate()
+    public void AttackInitiate(Card_Manager.Card card)
     {
-
+        General_UI_Manager.instance.EnableAttack_UI(card);
     }
     public void Reposition(GameObject ActiveShip, GameObject BenchShip)
     {
         can_retreat = false;
         General_UI_Manager.instance.Reposition(ActiveShip, BenchShip);
+    }
+    public void AttackResolve()
+    {
+
     }
 }
