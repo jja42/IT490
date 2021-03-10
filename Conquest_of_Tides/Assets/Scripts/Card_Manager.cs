@@ -168,7 +168,6 @@ public class Card_Manager : MonoBehaviour
         obj.GetComponent<Player_Input>().card_id = deck.cards[0].card_id;
         obj.GetComponent<Player_Input>().owner = 0;
         deck.cards.RemoveAt(0);
-        General_UI_Manager.instance.ArrangeHand(hand);
         }
     }
     public void GenerateDeck(Deck deck)

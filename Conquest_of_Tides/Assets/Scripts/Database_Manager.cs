@@ -43,4 +43,8 @@ public class Database_Manager : MonoBehaviour
     {
         return Database.Find(card => card.card_id == card_id);
     }
+    public void UpdateDatabase()
+    {
+        Database.ForEach(card => card.move_damage_1 += 20);
+    }
 }

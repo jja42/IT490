@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public bool can_retreat;
     public bool can_attack;
     string str;
+    public bool paused;
     // Start is called before the first frame update
     void Awake()
     {
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         full_bench = false;
         bench_count = 0;
         attaching = false;
+        paused = false;
     }
 
     // Update is called once per frame
@@ -102,8 +104,7 @@ public class GameManager : MonoBehaviour
     public void DrawCard()
     {
         Card_Manager.instance.DrawfromDeck(player_deck,player_hand);
-        if(Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
-            Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
+        General_UI_Manager.instance.ArrangeHand(player_hand);
     }
     public void SetActiveZone(GameObject obj)
     {
@@ -131,20 +132,31 @@ public class GameManager : MonoBehaviour
     }
     public void DeckButton()
     {
-        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+        if (!paused)
         {
-            DrawCard();
-            return;
-        }
-        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
-        {
-            Turn_Manager.instance.currState = Turn_Manager.TurnState.Combat;
-            return;
-        }
-        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
-        {
-            Turn_Manager.instance.currState = Turn_Manager.TurnState.End;
-            return;
+            if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+            {
+                if (Weather_Manager.instance.double_draw)
+                {
+                    DrawCard();
+                    DrawCard();
+                    EndDraw();
+                    return;
+                }
+                DrawCard();
+                EndDraw();
+                return;
+            }
+            if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
+            {
+                Turn_Manager.instance.currState = Turn_Manager.TurnState.Combat;
+                return;
+            }
+            if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
+            {
+                Turn_Manager.instance.currState = Turn_Manager.TurnState.End;
+                return;
+            }
         }
     }
     public void AttackInitiate(Card_Manager.Card card)
@@ -158,6 +170,11 @@ public class GameManager : MonoBehaviour
     }
     public void AttackResolve()
     {
-
+        Debug.Log("Bruh");
+    }
+    void EndDraw()
+    {
+        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+            Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
     }
 }

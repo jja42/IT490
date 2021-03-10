@@ -141,14 +141,19 @@ public class Card_UI_Manager : MonoBehaviour
         Move_Text_1.text = card.move_description_1;
         Move_Text_1.rectTransform.anchoredPosition = new Vector3(-5.3f, -63.32768f, 0);
         Move_Text_1.rectTransform.sizeDelta = new Vector2(229, 23.75f);
-        Move_Damage_1.text = card.move_damage_1.ToString();
+        Move_Damage_1.text = (card.move_damage_1 - Weather_Manager.instance.move_damage_reduction).ToString();
         path = "temp_assets/Fortification_type_" + card.move_cost_1[0].ToString();
         Move_1_Cost_1.sprite = Resources.Load<Sprite>(path);
         path = "temp_assets/Fortification_type_" + card.move_cost_1[1].ToString();
         Move_1_Cost_2.sprite = Resources.Load<Sprite>(path);
         path = "temp_assets/Fortification_type_" + card.move_cost_1[2].ToString();
         Move_1_Cost_3.sprite = Resources.Load<Sprite>(path);
-        path = "temp_assets/Fortification_type_" + card.move_cost_1[3].ToString();
+        if (Weather_Manager.instance.increased_move_cost)
+            path = "temp_assets/Fortification_type_7";
+        else
+        {
+            path = "temp_assets/Fortification_type_0";
+        }
         Move_1_Cost_4.sprite = Resources.Load<Sprite>(path);
         //set move 2
 
@@ -177,7 +182,7 @@ public class Card_UI_Manager : MonoBehaviour
         Weakness.SetActive(true);
         path = "temp_assets/Fortification_type_" + (int)Card_Manager.instance.Get_Weakness(card.type);
         Weakness_Img.sprite = Resources.Load<Sprite>(path);
-        Weakness_Text.text = "+20";
+        Weakness_Text.text = "+" + (20 + Weather_Manager.instance.weakness_enhancement).ToString();
         //set resistance
         path = "temp_assets/Fortification_type_" + (int)Card_Manager.instance.Get_Resistance(card.type);
         if (Card_Manager.instance.Get_Resistance(card.type) == Card_Manager.Type.None)
@@ -186,7 +191,7 @@ public class Card_UI_Manager : MonoBehaviour
         {
             Resistance.SetActive(true);
             Resistance_Img.sprite = Resources.Load<Sprite>(path);
-            Resistance_Text.text = "-20";
+            Resistance_Text.text = "-" + (20 - Weather_Manager.instance.resistance_reduction).ToString();
         }
         //set reposition cost
         if (card.reposition_cost == "None")

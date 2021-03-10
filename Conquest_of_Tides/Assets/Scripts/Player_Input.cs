@@ -29,71 +29,77 @@ public class Player_Input : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //MoveWithMouse();
-        if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
+        if (!GameManager.instance.paused)
         {
-            if (Input.GetMouseButtonDown(0))
+            //MoveWithMouse();
+            if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
             {
-                if (this_card.card_type == Card_Manager.CardType.Ship)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    if (active && GameManager.instance.can_retreat && !GameManager.instance.repositioning && !GameManager.instance.attaching)
+                    if (this_card.card_type == Card_Manager.CardType.Ship)
                     {
-                        General_UI_Manager.instance.EnableRepositionUI();
-                        GameManager.instance.Selection_1 = this.gameObject;
-                        GameManager.instance.repositioning = true;
-                    }
-                    if (GameManager.instance.repositioning && bench)
-                    {
-                        GameManager.instance.Selection_2 = this.gameObject;
-                    }
-                    if (!GameManager.instance.active_set && !active && !bench)
-                    {
-                        GameManager.instance.SetActiveZone(this.gameObject);
-                        active = true;
-                        GameManager.instance.player_hand.cards.Remove(this_card);
-                    }
-                    else
-                    {
-                        if (!GameManager.instance.full_bench && !active && !bench)
+                        if (active && GameManager.instance.can_retreat && !GameManager.instance.repositioning && !GameManager.instance.attaching)
                         {
-                            GameManager.instance.SetBench(this.gameObject);
-                            bench = true;
+                            General_UI_Manager.instance.EnableRepositionUI();
+                            GameManager.instance.Selection_1 = this.gameObject;
+                            GameManager.instance.repositioning = true;
+                        }
+                        if (GameManager.instance.repositioning && bench)
+                        {
+                            GameManager.instance.Selection_2 = this.gameObject;
+                        }
+                        if (!GameManager.instance.active_set && !active && !bench)
+                        {
+                            GameManager.instance.SetActiveZone(this.gameObject);
+                            active = true;
+                            GameManager.instance.player_hand.cards.Remove(this_card);
+                        }
+                        else
+                        {
+                            if (!GameManager.instance.full_bench && !active && !bench)
+                            {
+                                GameManager.instance.SetBench(this.gameObject);
+                                bench = true;
+                                GameManager.instance.player_hand.cards.Remove(this_card);
+                            }
+                        }
+                        if (GameManager.instance.attaching && (bench || active))
+                        {
+                            GameManager.instance.Selection_2 = this.gameObject;
+                        }
+                    }
+                    if (this_card.card_type == Card_Manager.CardType.Fortification)
+                    {
+                        if (!GameManager.instance.attaching && !attached && GameManager.instance.can_attach)
+                        {
+                            GameManager.instance.attaching = true;
+                            General_UI_Manager.instance.EnableAttachmentUI();
+                            GameManager.instance.Selection_1 = this.gameObject;
+                            attached = true;
                             GameManager.instance.player_hand.cards.Remove(this_card);
                         }
                     }
-                    if (GameManager.instance.attaching && (bench || active))
-                    {
-                        GameManager.instance.Selection_2 = this.gameObject;
-                    }
-                }
-                if (this_card.card_type == Card_Manager.CardType.Fortification)
-                {
-                    if (!GameManager.instance.attaching && !attached && GameManager.instance.can_attach)
-                    {
-                        GameManager.instance.attaching = true;
-                        General_UI_Manager.instance.EnableAttachmentUI();
-                        GameManager.instance.Selection_1 = this.gameObject;
-                        attached = true;
-                        GameManager.instance.player_hand.cards.Remove(this_card);
-                    }
                 }
             }
-        }
-        if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
-        {
-            if (Input.GetMouseButtonDown(0))
+            if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
             {
-                if (GameManager.instance.can_attack && active)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    GameManager.instance.AttackInitiate(this_card);
+                    if (GameManager.instance.can_attack && active)
+                    {
+                        GameManager.instance.AttackInitiate(this_card);
+                    }
                 }
             }
         }
     }
     private void OnMouseEnter()
     {
-        hovering = true;
-        GameManager.instance.PopupCard(card_id);
+        if (!GameManager.instance.paused)
+        {
+            hovering = true;
+            GameManager.instance.PopupCard(card_id);
+        }
     }
     private void OnMouseExit()
     {
