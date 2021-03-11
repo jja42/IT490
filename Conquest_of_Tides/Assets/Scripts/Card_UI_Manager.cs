@@ -76,6 +76,7 @@ public class Card_UI_Manager : MonoBehaviour
     #endregion
 
     private string path;
+    public string[] strarr;
     public static Card_UI_Manager instance;
     // Start is called before the first frame update
     void Start()
@@ -109,7 +110,7 @@ public class Card_UI_Manager : MonoBehaviour
     public void Setup_Ship(Card_Manager.Card card)
     {
         //set card image
-        path = "temp_assets/" + card.card_id.ToString();
+        path = "temp_assets/CardImg/" + card.card_id.ToString();
         Card_Image.sprite = Resources.Load<Sprite>(path);
         Card_Image.rectTransform.anchoredPosition = new Vector3(0.2405f, 77.64047f, 0f);
         //set card back
@@ -119,7 +120,11 @@ public class Card_UI_Manager : MonoBehaviour
         Card_Name.text = card.name;
         Card_Name.rectTransform.anchoredPosition = new Vector3(-9, 170.1299f, 0);
         //set card hp
-        Card_HP.text = card.hp.ToString() + "HP";
+        if (Weather_Manager.instance != null)
+            Card_HP.text = (card.hp-Weather_Manager.instance.decreased_hp).ToString() + "HP";
+        else {
+                Card_HP.text = card.hp.ToString() + "HP";
+             }
         //set card ability
 
         Ability.SetActive(false); //trim ability for now
@@ -141,19 +146,31 @@ public class Card_UI_Manager : MonoBehaviour
         Move_Text_1.text = card.move_description_1;
         Move_Text_1.rectTransform.anchoredPosition = new Vector3(-5.3f, -63.32768f, 0);
         Move_Text_1.rectTransform.sizeDelta = new Vector2(229, 23.75f);
-        Move_Damage_1.text = (card.move_damage_1 - Weather_Manager.instance.move_damage_reduction).ToString();
-        path = "temp_assets/Fortification_type_" + card.move_cost_1[0].ToString();
-        Move_1_Cost_1.sprite = Resources.Load<Sprite>(path);
-        path = "temp_assets/Fortification_type_" + card.move_cost_1[1].ToString();
-        Move_1_Cost_2.sprite = Resources.Load<Sprite>(path);
-        path = "temp_assets/Fortification_type_" + card.move_cost_1[2].ToString();
-        Move_1_Cost_3.sprite = Resources.Load<Sprite>(path);
-        if (Weather_Manager.instance.increased_move_cost)
-            path = "temp_assets/Fortification_type_7";
+        if(Weather_Manager.instance != null)
+            Move_Damage_1.text = (card.move_damage_1 - Weather_Manager.instance.move_damage_reduction).ToString();
         else
         {
-            path = "temp_assets/Fortification_type_0";
+            Move_Damage_1.text = card.move_damage_1.ToString();
         }
+        strarr = card.move_cost_1.Split('-');
+        if (Weather_Manager.instance != null)
+        {
+            if (Weather_Manager.instance.typeless_cost)
+            {
+                for (int i = 0; i < strarr.Length; i++)
+                {
+                    if (!(strarr[i] == "0"))
+                        strarr[i] = "7";
+                }
+            }
+        }
+        path = "temp_assets/Fortification_type_" + strarr[0].ToString();
+        Move_1_Cost_1.sprite = Resources.Load<Sprite>(path);
+        path = "temp_assets/Fortification_type_" + strarr[1].ToString();
+        Move_1_Cost_2.sprite = Resources.Load<Sprite>(path);
+        path = "temp_assets/Fortification_type_" + strarr[2].ToString();
+        Move_1_Cost_3.sprite = Resources.Load<Sprite>(path);
+        path = "temp_assets/Fortification_type_" + strarr[3].ToString();
         Move_1_Cost_4.sprite = Resources.Load<Sprite>(path);
         //set move 2
 
@@ -182,7 +199,12 @@ public class Card_UI_Manager : MonoBehaviour
         Weakness.SetActive(true);
         path = "temp_assets/Fortification_type_" + (int)Card_Manager.instance.Get_Weakness(card.type);
         Weakness_Img.sprite = Resources.Load<Sprite>(path);
-        Weakness_Text.text = "+" + (20 + Weather_Manager.instance.weakness_enhancement).ToString();
+        if(Weather_Manager.instance != null)
+            Weakness_Text.text = "+" + (20 + Weather_Manager.instance.weakness_enhancement).ToString();
+        else
+        {
+            Weakness_Text.text = "+20";
+        }
         //set resistance
         path = "temp_assets/Fortification_type_" + (int)Card_Manager.instance.Get_Resistance(card.type);
         if (Card_Manager.instance.Get_Resistance(card.type) == Card_Manager.Type.None)
@@ -191,7 +213,12 @@ public class Card_UI_Manager : MonoBehaviour
         {
             Resistance.SetActive(true);
             Resistance_Img.sprite = Resources.Load<Sprite>(path);
-            Resistance_Text.text = "-" + (20 - Weather_Manager.instance.resistance_reduction).ToString();
+            if (Weather_Manager.instance != null)
+                Resistance_Text.text = "-" + (20 - Weather_Manager.instance.resistance_reduction).ToString();
+            else
+            {
+                Resistance_Text.text = "-20";
+            }
         }
         //set reposition cost
         if (card.reposition_cost == "None")
@@ -201,14 +228,26 @@ public class Card_UI_Manager : MonoBehaviour
         else
         {
             Reposition_Cost.SetActive(true);
-            path = "temp_assets/Fortification_type_" + card.reposition_cost[0].ToString();
-            Reposition_Cost_1.sprite = Resources.Load<Sprite>(path);
-            path = "temp_assets/Fortification_type_" + card.reposition_cost[1].ToString();
-            Reposition_Cost_2.sprite = Resources.Load<Sprite>(path);
-            path = "temp_assets/Fortification_type_" + card.reposition_cost[2].ToString();
-            Reposition_Cost_3.sprite = Resources.Load<Sprite>(path);
-            path = "temp_assets/Fortification_type_" + card.reposition_cost[3].ToString();
-            Reposition_Cost_4.sprite = Resources.Load<Sprite>(path);
+            strarr = card.reposition_cost.Split('-');
+            if (Weather_Manager.instance != null)
+            {
+                if (Weather_Manager.instance.typeless_cost)
+                {
+                    for (int i = 0; i < strarr.Length; i++)
+                    {
+                        if (!strarr[i].Equals("0"))
+                            strarr[i] = "7";
+                    }
+                }
+            }
+                path = "temp_assets/Fortification_type_" + strarr[0].ToString();
+                Reposition_Cost_1.sprite = Resources.Load<Sprite>(path);
+                path = "temp_assets/Fortification_type_" + strarr[1].ToString();
+                Reposition_Cost_2.sprite = Resources.Load<Sprite>(path);
+                path = "temp_assets/Fortification_type_" + strarr[2].ToString();
+                Reposition_Cost_3.sprite = Resources.Load<Sprite>(path);
+                path = "temp_assets/Fortification_type_" + strarr[3].ToString();
+                Reposition_Cost_4.sprite = Resources.Load<Sprite>(path);
         }
         //set flavor text
         Flavor_Text.text = ""; //trim Flavor text for now

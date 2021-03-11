@@ -95,6 +95,8 @@ public class General_UI_Manager : MonoBehaviour
     public void AttachFortification(GameObject Fortification, GameObject Ship)
     {
         Fortification.transform.parent = Ship.transform;
+        if(Weather_Manager.instance.double_fortify)
+            Instantiate(Fortification, Ship.transform);
         ArrangeFortifications(Ship);
         Attachment_UI.SetActive(false);
     }

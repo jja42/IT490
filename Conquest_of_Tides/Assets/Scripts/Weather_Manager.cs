@@ -8,13 +8,14 @@ public class Weather_Manager : MonoBehaviour
     public static Weather_Manager instance;
     public float accuracy;
     public int turn_damage;
-    public bool retreat_decrease;
+    public bool typeless_cost;
     public int resistance_reduction;
     public int weakness_enhancement;
     public int move_damage_reduction;
-    public bool increased_move_cost;
+    public int decreased_hp;
     public bool double_draw;
     public bool double_fortify;
+    public Image Weather_Img;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,11 +57,11 @@ public class Weather_Manager : MonoBehaviour
         Rain,
         Thunderstorm,
         Snow,
-        Mist,
+        Cloudy,
         Clear_Sky
     }
 
-    public void SetWeather(string weather_type, int temp, int humid, int visibility, float wind_speed)
+    public void SetWeather(string weather_type, float temp, int humid, int visibility, float wind_speed)
     {
         w_weathertype = GetWeather(weather_type);
         w_temperature = GetTemperature(temp);
@@ -77,6 +78,7 @@ public class Weather_Manager : MonoBehaviour
         Humid.text = "Humidity (" + w_humidity + ") - " + GetHumidityEffect(w_humidity);
         Visibility.text = "Visibility (" + w_visibility.ToString() + "%) - " + GetVisibilityEffect(w_visibility);
         Wind_Speed.text = "Wind Speed (" + w_windspeed + ") - " + GetWindSpeedEffect(w_windspeed);
+        Weather_Img.sprite = Resources.Load<Sprite>("temp_assets/" + w_weathertype);
     }
 
     #region Get_Weather_Vars
@@ -84,22 +86,22 @@ public class Weather_Manager : MonoBehaviour
     {
         switch (weather_type)
         {
-            case "rain":
+            case "Rain":
                 return WeatherType.Rain;
-            case "thunderstorm":
+            case "Thunderstorm":
                 return WeatherType.Thunderstorm;
-            case "snow":
+            case "Snow":
                 return WeatherType.Snow;
-            case "mist":
-                return WeatherType.Mist;
-            case "clear sky":
+            case "Clouds":
+                return WeatherType.Cloudy;
+            case "Clear":
                 return WeatherType.Clear_Sky;
             default:
                 return WeatherType.Clear_Sky;
         }
     }
 
-    Temperature GetTemperature(int temp)
+    Temperature GetTemperature(float temp)
     {
         if (temp < 50)
             return Temperature.Cold;
@@ -144,9 +146,9 @@ public class Weather_Manager : MonoBehaviour
                 return "Ships will take Damage each Turn";
             case WeatherType.Snow:
                 return "Snowfall";
-            case WeatherType.Mist:
-                retreat_decrease = true;
-                return "Decreased Retreat Cost";
+            case WeatherType.Cloudy:
+                typeless_cost = true;
+                return "All Costs are Typeless";
             case WeatherType.Clear_Sky:
                 return "No Effect";
             default:
@@ -181,8 +183,8 @@ public class Weather_Manager : MonoBehaviour
             case Humidity.Normal:
                 return "No Effect";
             case Humidity.High:
-                increased_move_cost = true;
-                return "Increased Move Cost";
+                decreased_hp = 10;
+                return "Decreased HP";
             default:
                 return "No Effect";
         }
@@ -219,5 +221,13 @@ public class Weather_Manager : MonoBehaviour
     public void DisableWeatherUI()
     {
         Weather_Popup.SetActive(false);
+    }
+    public void GetData()
+    {
+        StartCoroutine(WebRequest.instance.Api_Request());
+    }
+    public void GetHistoricalData(string date)
+    {
+        StartCoroutine(WebRequest.instance.Historical_Api_Request(date));
     }
 }
