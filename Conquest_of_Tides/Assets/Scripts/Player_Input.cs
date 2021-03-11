@@ -13,21 +13,23 @@ public class Player_Input : MonoBehaviour
     SpriteRenderer spriteRenderer;
     public string attached_fortifications;
     public int owner;
-    // Start is called before the first frame update
-    void Start()
-    {
-        this_card = Card_Manager.instance.GetCardByID(card_id);
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        if(this_card.card_type == Card_Manager.CardType.Ship)
-            spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/CardImg/" + this_card.card_id.ToString());
-        if (this_card.card_type == Card_Manager.CardType.Fortification)
-            spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/Fortification_card_" + (int)this_card.type);
-        attached_fortifications = "";
-    }
+    public bool generated;
+    public int damage_taken;
 
     // Update is called once per frame
     void Update()
     {
+        if (!generated)
+        {
+            this_card = Card_Manager.instance.GetCardByID(card_id);
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (this_card.card_type == Card_Manager.CardType.Ship)
+                spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/CardImg/" + this_card.card_id.ToString());
+            if (this_card.card_type == Card_Manager.CardType.Fortification)
+                spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/Fortification_card_" + (int)this_card.type);
+            attached_fortifications = "";
+            generated = true;
+        }
         if (!GameManager.instance.paused)
         { 
             if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)

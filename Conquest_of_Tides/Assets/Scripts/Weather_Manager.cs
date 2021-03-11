@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Weather_Manager : MonoBehaviour
 {
     public static Weather_Manager instance;
-    public float accuracy;
     public int turn_damage;
     public bool typeless_cost;
     public int resistance_reduction;
@@ -192,7 +191,6 @@ public class Weather_Manager : MonoBehaviour
 
     string GetVisibilityEffect(float visibility)
     {
-        accuracy = visibility / 100;
         return "Accuracy of Moves set to " + visibility.ToString() + "%";
     }
 

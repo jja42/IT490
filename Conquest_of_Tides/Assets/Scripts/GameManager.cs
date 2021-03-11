@@ -21,8 +21,6 @@ public class GameManager : MonoBehaviour
     public bool can_attack;
     string str;
     public bool paused;
-    public GameObject Player_Active_Zone;
-    public GameObject Opponent_Active_Zone;
     // Start is called before the first frame update
     void Awake()
     {
@@ -94,6 +92,7 @@ public class GameManager : MonoBehaviour
         if (Turn_Manager.instance.currState == Turn_Manager.TurnState.End)
         {
             can_draw = true;
+            Combat_Manager.instance.Storm();
             Turn_Manager.instance.currState = Turn_Manager.TurnState.Draw;
         }
     }
@@ -134,7 +133,12 @@ public class GameManager : MonoBehaviour
     public void AttachFortification(GameObject Fortification, GameObject Ship)
     {
         can_attach = false;
-        str = "-" + (int)Fortification.GetComponent<Player_Input>().this_card.type;
+        if (Ship.GetComponent<Player_Input>().attached_fortifications == "")
+            str = ((int)Fortification.GetComponent<Player_Input>().this_card.type).ToString();
+        else
+        {
+            str = "-" + (int)Fortification.GetComponent<Player_Input>().this_card.type;
+        }
         if (Weather_Manager.instance.double_fortify)
             str += "-" + (int)Fortification.GetComponent<Player_Input>().this_card.type;
         Ship.GetComponent<Player_Input>().attached_fortifications += str;
@@ -180,8 +184,7 @@ public class GameManager : MonoBehaviour
     }
     public void AttackResolve()
     {
-        Selection_1 = Player_Active_Zone.transform.GetChild(1).gameObject;
-        Selection_2 = Opponent_Active_Zone.transform.GetChild(1).gameObject;
+        Combat_Manager.instance.HandleCombat();
     }
     void EndDraw()
     {
