@@ -13,6 +13,11 @@ public class Settings_Manager : MonoBehaviour
     public InputField historical_input;
     public void Awake()
     {
+        if (instance)
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
         DontDestroyOnLoad(this.gameObject);
         user_id = 2;

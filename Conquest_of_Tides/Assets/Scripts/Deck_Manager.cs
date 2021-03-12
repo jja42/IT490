@@ -26,10 +26,10 @@ public class Deck_Manager : MonoBehaviour
         instance = this;
         deck_cards = new List<int>();
         deck = new List<GameObject>();
-        list_offset = new Vector3(-275, 450, 0);
-        x_offset = new Vector3(78, 0, 0);
-        y_offset = new Vector3(0, -95, 0);
-        deck_card_offset = new Vector3(239, -77, 0);
+        list_offset = new Vector3(-275, 900, 0);
+        x_offset = new Vector3(75, 0, 0);
+        y_offset = new Vector3(0, -100, 0);
+        deck_card_offset = new Vector3(-35, 320, 0);
         Database_Manager.instance.GenerateDatabase();
         //StartCoroutine(WebRequest.instance.GetDeckList(Settings_Manager.instance.user_id));
     }
@@ -51,6 +51,7 @@ public class Deck_Manager : MonoBehaviour
         deck_cards.Add(card_id);
         obj = Instantiate(card_prefab, deck_list);
         obj.GetComponent<Deck_Input>().card_id = card_id;
+        obj.GetComponent<Deck_Input>().in_deck = true;
         deck.Add(obj);
         ArrangeDeck();
     }
@@ -64,7 +65,7 @@ public class Deck_Manager : MonoBehaviour
     }
     public void ArrangeDeck()
     {
-        deck_offset = new Vector3(-275, 410, 0);
+        deck_offset = new Vector3(0, 0, 0);
         for (int index = 0; index < deck_list.transform.childCount; index++)
         {
             deck[index].transform.position = deck_card_offset;
@@ -72,9 +73,9 @@ public class Deck_Manager : MonoBehaviour
         for (int index = 0; index < deck_list.transform.childCount; index++)
         {
             deck_offset += x_offset;
-            if (deck_offset.x > 225)
+            if (deck_offset.x > 400)
             {
-                deck_offset -= (x_offset * 6);
+                deck_offset -= (x_offset * 5);
                 deck_offset += y_offset;
             }
             deck[index].transform.position += deck_offset;

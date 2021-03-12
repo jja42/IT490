@@ -69,12 +69,12 @@ public class Card_Manager : MonoBehaviour
     }
     public struct Deck
     {
-        public int id;
+        public int owner;
         public List<Card> cards;
         public string name;
-        public Deck(int id, string name)
+        public Deck(int owner, string name)
         {
-            this.id = id;
+            this.owner = owner;
             this.cards = new List<Card>();
             this.name = name;
         }
@@ -158,18 +158,31 @@ public class Card_Manager : MonoBehaviour
 
     }
 
-    public void DrawfromDeck(Deck deck,Hand hand)
+    public void DrawfromPlayerDeck(Deck deck,Hand hand)
     {
         if (deck.cards.Count > 0) {
         hand.cards.Add(deck.cards[0]);
         path = "temp_prefabs/Card";
         GameObject obj = Resources.Load<GameObject>(path);
-        Instantiate(obj, General_UI_Manager.instance.Player_Hand.transform);
+        Instantiate(obj, General_UI_Manager.instance.Player_Hand.transform).GetComponent<Player_Input>().owner = 1;
         obj.GetComponent<Player_Input>().card_id = deck.cards[0].card_id;
-        obj.GetComponent<Player_Input>().owner = 0;
         deck.cards.RemoveAt(0);
         }
     }
+
+    public void DrawfromOpponentDeck(Deck deck, Hand hand)
+    {
+        if (deck.cards.Count > 0)
+        {
+            hand.cards.Add(deck.cards[0]);
+            path = "temp_prefabs/Card";
+            GameObject obj = Resources.Load<GameObject>(path);
+            Instantiate(obj, General_UI_Manager.instance.Opponent_Hand.transform).GetComponent<Player_Input>().owner = 0;
+            obj.GetComponent<Player_Input>().card_id = deck.cards[0].card_id;
+            deck.cards.RemoveAt(0);
+        }
+    }
+
     public void GenerateDeck(Deck deck)
     {
        for(int i = 0; i< Database_Manager.instance.Database.Count; i++)

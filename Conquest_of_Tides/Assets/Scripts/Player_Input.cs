@@ -23,15 +23,22 @@ public class Player_Input : MonoBehaviour
         {
             this_card = Card_Manager.instance.GetCardByID(card_id);
             spriteRenderer = GetComponent<SpriteRenderer>();
-            if (this_card.card_type == Card_Manager.CardType.Ship)
-                spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/CardImg/" + this_card.card_id.ToString());
-            if (this_card.card_type == Card_Manager.CardType.Fortification)
-                spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/Fortification_card_" + (int)this_card.type);
+            if (owner != 0)
+            {
+                if (this_card.card_type == Card_Manager.CardType.Ship)
+                    spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/CardImg/" + this_card.card_id.ToString());
+                if (this_card.card_type == Card_Manager.CardType.Fortification)
+                    spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/Fortification_card_" + (int)this_card.type);
+            }
+            else
+            {
+                spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/generic");
+            }
             attached_fortifications = "";
             generated = true;
         }
         if (!GameManager.instance.paused)
-        { 
+        {
             if (hovering && Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
             {
                 if (Input.GetMouseButtonDown(0))
@@ -50,7 +57,8 @@ public class Player_Input : MonoBehaviour
                         }
                         if (!GameManager.instance.active_set && !active && !bench)
                         {
-                            GameManager.instance.SetActiveZone(this.gameObject);
+                            PlayerTurnManager.instance.SetActive(card_id);
+                            GameManager.instance.SetPlayerActiveZone(this.gameObject);
                             active = true;
                             GameManager.instance.player_hand.cards.Remove(this_card);
                         }
@@ -58,7 +66,8 @@ public class Player_Input : MonoBehaviour
                         {
                             if (!GameManager.instance.full_bench && !active && !bench)
                             {
-                                GameManager.instance.SetBench(this.gameObject);
+                                PlayerTurnManager.instance.SetBench(card_id);
+                                GameManager.instance.SetPlayerBench(this.gameObject);
                                 bench = true;
                                 GameManager.instance.player_hand.cards.Remove(this_card);
                             }
@@ -95,8 +104,8 @@ public class Player_Input : MonoBehaviour
     }
     private void OnMouseEnter()
     {
-        if (!GameManager.instance.paused)
-        {
+        if (!GameManager.instance.paused && owner != 0)
+        { 
             hovering = true;
             GameManager.instance.PopupCard(card_id);
         }
@@ -105,5 +114,15 @@ public class Player_Input : MonoBehaviour
     {
         hovering = false;
         GameManager.instance.RemovePopup();
+    }
+    public void Reveal()
+    {
+        owner = 2;
+        this_card = Card_Manager.instance.GetCardByID(card_id);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (this_card.card_type == Card_Manager.CardType.Ship)
+            spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/CardImg/" + this_card.card_id.ToString());
+        if (this_card.card_type == Card_Manager.CardType.Fortification)
+            spriteRenderer.sprite = Resources.Load<Sprite>("temp_assets/Fortification_card_" + (int)this_card.type);
     }
 }

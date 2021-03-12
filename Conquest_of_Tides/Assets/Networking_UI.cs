@@ -63,6 +63,6 @@ public class Networking_UI : MonoBehaviour
     }
     public void Exit()
     {
-        Application.Quit();
+        SceneManager.LoadScene(1);
     }
 }

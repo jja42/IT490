@@ -25,21 +25,34 @@ public class Combat_Manager : MonoBehaviour
     string[] fortifications;
     public GameObject Player_Active_Zone;
     public GameObject Opponent_Active_Zone;
+    public GameObject Victory_UI;
+    public GameObject Loss_UI;
     public void Awake()
     {
         instance = this;
     }
 
-    public void HandleCombat()
+    public void HandlePlayerCombat()
     {
-        player_active = Player_Active_Zone.transform.GetChild(1).gameObject;
-        opponent_active = Opponent_Active_Zone.transform.GetChild(1).gameObject;
-        player_card = player_active.GetComponent<Player_Input>().this_card;
-        opponent_card = opponent_active.GetComponent<Player_Input>().this_card;
-        current_fortifications = player_active.GetComponent<Player_Input>().attached_fortifications;
-        Attack(player_card, opponent_card);
+        if (Player_Active_Zone.transform.childCount > 0 && Opponent_Active_Zone.transform.childCount > 0)
+        {
+            player_active = Player_Active_Zone.transform.GetChild(1).gameObject;
+            opponent_active = Opponent_Active_Zone.transform.GetChild(1).gameObject;
+            player_card = player_active.GetComponent<Player_Input>().this_card;
+            opponent_card = opponent_active.GetComponent<Player_Input>().this_card;
+            current_fortifications = player_active.GetComponent<Player_Input>().attached_fortifications;
+            PlayerAttack(player_card, opponent_card);
+        }
     }
-    public void Attack(Card_Manager.Card player_card, Card_Manager.Card opponent_card)
+    public void HandleOpponentCombat(int damage)
+    {
+            player_active = Player_Active_Zone.transform.GetChild(1).gameObject;
+            opponent_active = Opponent_Active_Zone.transform.GetChild(1).gameObject;
+            player_card = player_active.GetComponent<Player_Input>().this_card;
+            opponent_card = opponent_active.GetComponent<Player_Input>().this_card;
+            OpponentAttack(player_card, opponent_card, damage);
+    }
+    public void PlayerAttack(Card_Manager.Card player_card, Card_Manager.Card opponent_card)
     {
         damage = player_card.move_damage_1;
         if(Weather_Manager.instance.move_damage_reduction > 0)
@@ -94,6 +107,7 @@ public class Combat_Manager : MonoBehaviour
         else
         {
             opponent_active.GetComponent<Player_Input>().damage_taken += damage;
+            PlayerTurnManager.instance.Combat(damage);
             if (Weather_Manager.instance.decreased_hp > 0)
             {
                 if (opponent_active.GetComponent<Player_Input>().damage_taken >= (opponent_card.hp - Weather_Manager.instance.decreased_hp))
@@ -117,34 +131,42 @@ public class Combat_Manager : MonoBehaviour
                 }
             }
         }
-        //else
-        //{
-        //    while(damage > 0)
-        //    {
-        //        if(damage >= 50)
-        //        {
-        //            Instantiate(fifty_counter, opponent_active.transform);
-        //            damage -= 50;
-        //        }
-        //        if (damage >= 30)
-        //        {
-        //            Instantiate(thirty_counter, opponent_active.transform);
-        //            damage -= 30;
-        //        }
-        //        if (damage >= 10)
-        //        {
-        //            Instantiate(ten_counter, opponent_active.transform);
-        //            damage -= 10;
-        //        }
-        //    }
-        // ArrangeCounters(opponent_active);
-        //}
             player_active_damage_ui.text = "Player Ship HP: " + (player_card.hp - Weather_Manager.instance.decreased_hp - player_active.GetComponent<Player_Input>().damage_taken).ToString();
             opponent_active_damage_ui.text = "Opponent Ship HP: " + (opponent_card.hp - Weather_Manager.instance.decreased_hp - opponent_active.GetComponent<Player_Input>().damage_taken).ToString();
     }
+    public void OpponentAttack(Card_Manager.Card player_card, Card_Manager.Card opponent_card, int damage)
+    {
+            player_active.GetComponent<Player_Input>().damage_taken += damage;
+            if (Weather_Manager.instance.decreased_hp > 0)
+            {
+                if (player_active.GetComponent<Player_Input>().damage_taken >= (opponent_card.hp - Weather_Manager.instance.decreased_hp))
+                {
+                    Destroy(player_active);
+                    Lose();
+                    player_active_damage_ui.text = "Player Ship HP: ";
+                }
+            }
+            else
+            {
+                if (player_active.GetComponent<Player_Input>().damage_taken >= opponent_card.hp)
+                {
+                Destroy(player_active);
+                Lose();
+                player_active_damage_ui.text = "Player Ship HP: ";
+                }
+            }
+        player_active_damage_ui.text = "Player Ship HP: " + (player_card.hp - Weather_Manager.instance.decreased_hp - player_active.GetComponent<Player_Input>().damage_taken).ToString();
+        opponent_active_damage_ui.text = "Opponent Ship HP: " + (opponent_card.hp - Weather_Manager.instance.decreased_hp - opponent_active.GetComponent<Player_Input>().damage_taken).ToString();
+    }
     public void PrizeCard()
     {
-
+        GameManager.instance.paused = true;
+        Victory_UI.SetActive(true);
+    }
+    public void Lose()
+    {
+        GameManager.instance.paused = true;
+        Loss_UI.SetActive(true);
     }
     public void ArrangeCounters(GameObject obj)
     {
@@ -164,43 +186,60 @@ public class Combat_Manager : MonoBehaviour
     }
     public void Storm()
     {
-        player_active = Player_Active_Zone.transform.GetChild(1).gameObject;
-        opponent_active = Opponent_Active_Zone.transform.GetChild(1).gameObject;
-        player_card = player_active.GetComponent<Player_Input>().this_card;
-        opponent_card = opponent_active.GetComponent<Player_Input>().this_card;
-        if (Weather_Manager.instance.turn_damage > 0)
+        if (Player_Active_Zone.transform.childCount > 1)
         {
-            opponent_active.GetComponent<Player_Input>().damage_taken += Weather_Manager.instance.turn_damage;
-            player_active.GetComponent<Player_Input>().damage_taken += Weather_Manager.instance.turn_damage;
-            if (Weather_Manager.instance.decreased_hp > 0)
+            player_active = Player_Active_Zone.transform.GetChild(1).gameObject;
+            player_card = player_active.GetComponent<Player_Input>().this_card;
+            if (Weather_Manager.instance.turn_damage > 0)
             {
-                if (opponent_active.GetComponent<Player_Input>().damage_taken >= (opponent_card.hp - Weather_Manager.instance.decreased_hp))
+                player_active.GetComponent<Player_Input>().damage_taken += Weather_Manager.instance.turn_damage;
+                if (Weather_Manager.instance.decreased_hp > 0)
                 {
-                    Destroy(opponent_active);
-                    opponent_active_damage_ui.text = "Opponent Ship HP: ";
+                    if (player_active.GetComponent<Player_Input>().damage_taken >= (player_card.hp - Weather_Manager.instance.decreased_hp))
+                    {
+                        Destroy(player_active);
+                        player_active_damage_ui.text = "Player Ship HP: ";
+                    }
                 }
-                if (player_active.GetComponent<Player_Input>().damage_taken >= (player_card.hp - Weather_Manager.instance.decreased_hp))
+                else
                 {
-                    Destroy(player_active);
-                    player_active_damage_ui.text = "Player Ship HP: ";
+                    if (player_active.GetComponent<Player_Input>().damage_taken >= player_card.hp)
+                    {
+                        Destroy(player_active);
+                        player_active_damage_ui.text = "Player Ship HP: ";
+                    }
                 }
+                storm_ui.SetActive(true);
             }
-            else
-            {
-                if (opponent_active.GetComponent<Player_Input>().damage_taken >= opponent_card.hp)
-                {
-                    Destroy(opponent_active);
-                    opponent_active_damage_ui.text = "Opponent Ship HP: ";
-                }
-                if (player_active.GetComponent<Player_Input>().damage_taken >= player_card.hp)
-                {
-                    Destroy(player_active);
-                    player_active_damage_ui.text = "Player Ship HP: ";
-                }
-            }
-            storm_ui.SetActive(true);
+            player_active_damage_ui.text = "Player Ship HP: " + (player_card.hp - Weather_Manager.instance.decreased_hp - player_active.GetComponent<Player_Input>().damage_taken).ToString();
         }
-        player_active_damage_ui.text = "Player Ship HP: " + (player_card.hp - Weather_Manager.instance.decreased_hp - player_active.GetComponent<Player_Input>().damage_taken).ToString();
-        opponent_active_damage_ui.text = "Opponent Ship HP: " + (opponent_card.hp - Weather_Manager.instance.decreased_hp - opponent_active.GetComponent<Player_Input>().damage_taken).ToString();
+        if (Opponent_Active_Zone.transform.childCount > 1)
+        {
+            opponent_active = Opponent_Active_Zone.transform.GetChild(1).gameObject;
+            opponent_card = opponent_active.GetComponent<Player_Input>().this_card;
+            if (Weather_Manager.instance.turn_damage > 0)
+            {
+                opponent_active.GetComponent<Player_Input>().damage_taken += Weather_Manager.instance.turn_damage;
+                if (Weather_Manager.instance.decreased_hp > 0)
+                {
+                    if (opponent_active.GetComponent<Player_Input>().damage_taken >= (opponent_card.hp - Weather_Manager.instance.decreased_hp))
+                    {
+                        Destroy(opponent_active);
+                        opponent_active_damage_ui.text = "Opponent Ship HP: ";
+                    }
+                }
+                else
+                {
+                    if (opponent_active.GetComponent<Player_Input>().damage_taken >= opponent_card.hp)
+                    {
+                        Destroy(opponent_active);
+                        opponent_active_damage_ui.text = "Opponent Ship HP: ";
+                    }
+                }
+                storm_ui.SetActive(true);
+            }
+            opponent_active_damage_ui.text = "Opponent Ship HP: " + (opponent_card.hp - Weather_Manager.instance.decreased_hp - opponent_active.GetComponent<Player_Input>().damage_taken).ToString();
+        }
+        
     }
 }

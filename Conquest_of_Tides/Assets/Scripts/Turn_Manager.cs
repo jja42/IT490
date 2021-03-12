@@ -14,21 +14,52 @@ public class Turn_Manager : MonoBehaviour
     }
     public enum TurnPlayer : int
     {
-        Player = 0,
-        Opponent = 1
+        None = 0,
+        Player1 = 1,
+        Player2 = 2
     }
     public TurnState currState;
+    public TurnPlayer currPlayer;
     public static Turn_Manager instance;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         instance = this;
         currState = TurnState.Start;
+        currPlayer = TurnPlayer.Player1;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SwitchTurn()
     {
+        PlayerTurnManager.instance.Switch();
+        if (currPlayer == TurnPlayer.Player1)
+        {
+            currPlayer = TurnPlayer.Player2;
+            GameManager.instance.Pause();
+        }
+        else
+        {
+            if (currPlayer == TurnPlayer.Player2)
+            {
+                currPlayer = TurnPlayer.Player1;
+                GameManager.instance.Pause();
+            }
+        }
+        SetPlayer();
+    }
+
+    public void PausePlayer()
+    {
+        PlayerTurnManager.instance.Pause();
+    }
+    public void SetState(int i)
+    {
+        currState = (TurnState)i;
         General_UI_Manager.instance.SetPhase();
     }
+    public void SetPlayer()
+    {
+        General_UI_Manager.instance.SetPlayer();
+    }
+
 }

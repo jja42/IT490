@@ -7,10 +7,13 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public Card_Manager.Deck player_deck;
     public Card_Manager.Hand player_hand;
+    public Card_Manager.Deck opponent_deck;
+    public Card_Manager.Hand opponent_hand;
     bool generated;
     public bool active_set;
     public bool full_bench;
-    public int bench_count;
+    public int opponent_bench_count;
+    public int player_bench_count;
     public GameObject Selection_1;
     public GameObject Selection_2;
     public bool attaching;
@@ -28,7 +31,8 @@ public class GameManager : MonoBehaviour
         generated = false;
         active_set = false;
         full_bench = false;
-        bench_count = 0;
+        player_bench_count = 0;
+        opponent_bench_count = 0;
         attaching = false;
         paused = false;
     }
@@ -38,13 +42,16 @@ public class GameManager : MonoBehaviour
     {
         if (!generated)
         {
-            player_deck = new Card_Manager.Deck(0,"player_deck");
-            player_hand = new Card_Manager.Hand(0);
+            player_deck = new Card_Manager.Deck(1,"player_deck");
+            player_hand = new Card_Manager.Hand(1);
+            opponent_deck = new Card_Manager.Deck(2,"opponent_deck");
+            opponent_hand = new Card_Manager.Hand(2);
             Database_Manager.instance.GenerateDatabase();
             Card_Manager.instance.GenerateDeck(player_deck);
+            Card_Manager.instance.GenerateDeck(opponent_deck);
             generated = true;
             //if(!Settings_Manager.instance.historical)
-            //    Weather_Manager.instance.GetData();
+            //   Weather_Manager.instance.GetData();
             //else
             //{
             //    Weather_Manager.instance.GetHistoricalData(Settings_Manager.instance.historical_date);
@@ -64,7 +71,7 @@ public class GameManager : MonoBehaviour
         {
             if (Selection_1 != null && Selection_2 != null)
             {
-                Reposition(Selection_1, Selection_2);
+                PlayerReposition(Selection_1, Selection_2);
                 repositioning = false;
                 Selection_1 = null;
                 Selection_2 = null;
@@ -76,24 +83,10 @@ public class GameManager : MonoBehaviour
             {
                 DrawCard();
             }
+            OpponentStart();
             can_attach = true;
             can_retreat = true;
             Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
-        }
-        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
-        {
-            can_attach = true;
-            can_retreat = true;
-        }
-        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
-        {
-            can_attack = true;
-        }
-        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.End)
-        {
-            can_draw = true;
-            Combat_Manager.instance.Storm();
-            Turn_Manager.instance.currState = Turn_Manager.TurnState.Draw;
         }
     }
     public void PopupCard(int card_id)
@@ -110,26 +103,41 @@ public class GameManager : MonoBehaviour
     }
     public void DrawCard()
     {
-        Card_Manager.instance.DrawfromDeck(player_deck,player_hand);
-        General_UI_Manager.instance.ArrangeHand(player_hand);
+        Card_Manager.instance.DrawfromPlayerDeck(player_deck,player_hand);
+        General_UI_Manager.instance.ArrangePlayerHand(player_hand);
     }
-    public void SetActiveZone(GameObject obj)
+    public void DrawOpponentCard() {
+        Card_Manager.instance.DrawfromOpponentDeck(opponent_deck, opponent_hand);
+        General_UI_Manager.instance.ArrangeOpponentHand(opponent_hand);
+    }
+    public void SetPlayerActiveZone(GameObject obj)
     {
         active_set = true;
-        General_UI_Manager.instance.MoveToActiveZone(obj);
+        General_UI_Manager.instance.MoveToPlayerActiveZone(obj);
     }
-    public void SetBench(GameObject obj)
+    public void SetOpponentActiveZone(int id)
     {
-        bench_count++;
-        if(bench_count > 5)
+        General_UI_Manager.instance.MoveToOpponentActiveZone(id);
+    }
+    public void SetPlayerBench(GameObject obj)
+    {
+        player_bench_count++;
+        if(player_bench_count > 5)
         {
             full_bench = true;
         }
         else
         {
-            General_UI_Manager.instance.MoveToBench(obj);
+            General_UI_Manager.instance.MoveToPlayerBench(obj);
         }
     }
+
+    public void SetOpponentBench(int id)
+    {
+        opponent_bench_count++;
+        General_UI_Manager.instance.MoveToOpponentBench(id);
+    }
+
     public void AttachFortification(GameObject Fortification, GameObject Ship)
     {
         can_attach = false;
@@ -142,11 +150,18 @@ public class GameManager : MonoBehaviour
         if (Weather_Manager.instance.double_fortify)
             str += "-" + (int)Fortification.GetComponent<Player_Input>().this_card.type;
         Ship.GetComponent<Player_Input>().attached_fortifications += str;
+        if(Ship.GetComponent<Player_Input>().active)
+            PlayerTurnManager.instance.AttachFortificationActive(Fortification.GetComponent<Player_Input>().card_id);
+        if (Ship.GetComponent<Player_Input>().bench)
+        {
+            int index = Ship.transform.GetSiblingIndex();
+            PlayerTurnManager.instance.AttachFortificationBench(Fortification.GetComponent<Player_Input>().card_id,index);
+        }
         General_UI_Manager.instance.AttachFortification(Fortification,Ship);
     }
     public void DeckButton()
     {
-        if (!paused)
+        if (!paused && (int)Turn_Manager.instance.currPlayer == PlayerTurnManager.instance.turn_id)
         {
             if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
             {
@@ -154,22 +169,42 @@ public class GameManager : MonoBehaviour
                 {
                     DrawCard();
                     DrawCard();
-                    EndDraw();
+                    Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
+                    Turn_Manager.instance.SetState(2);
+                    PlayerTurnManager.instance.SetTurnPhase(2);
                     return;
                 }
+                can_attach = true;
+                can_retreat = true;
                 DrawCard();
-                EndDraw();
+                Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
+                Turn_Manager.instance.SetState(2);
+                PlayerTurnManager.instance.SetTurnPhase(2);
                 return;
             }
             if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
             {
+                can_attack = true;
                 Turn_Manager.instance.currState = Turn_Manager.TurnState.Combat;
+                Turn_Manager.instance.SetState(3);
+                PlayerTurnManager.instance.SetTurnPhase(3);
                 return;
             }
             if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
             {
                 Turn_Manager.instance.currState = Turn_Manager.TurnState.End;
+                Turn_Manager.instance.SetState(4);
+                PlayerTurnManager.instance.SetTurnPhase(4);
                 return;
+            }
+            if(Turn_Manager.instance.currState == Turn_Manager.TurnState.End)
+            {
+                can_draw = true;
+                Combat_Manager.instance.Storm();
+                Turn_Manager.instance.currState = Turn_Manager.TurnState.Draw;
+                Turn_Manager.instance.SetState(1);
+                PlayerTurnManager.instance.SetTurnPhase(1);
+                Turn_Manager.instance.SwitchTurn();
             }
         }
     }
@@ -177,18 +212,33 @@ public class GameManager : MonoBehaviour
     {
         General_UI_Manager.instance.EnableAttack_UI(card);
     }
-    public void Reposition(GameObject ActiveShip, GameObject BenchShip)
+    public void PlayerReposition(GameObject ActiveShip, GameObject BenchShip)
     {
         can_retreat = false;
-        General_UI_Manager.instance.Reposition(ActiveShip, BenchShip);
+        int index = BenchShip.transform.GetSiblingIndex();
+        PlayerTurnManager.instance.RepositionShips(index);
+        General_UI_Manager.instance.PlayerReposition(ActiveShip, BenchShip);
     }
-    public void AttackResolve()
+    public void PlayerAttackResolve()
     {
-        Combat_Manager.instance.HandleCombat();
+        Combat_Manager.instance.HandlePlayerCombat();
     }
-    void EndDraw()
+    public void OpponentStart()
     {
-        if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
-            Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
+        for (int i = 0; i < 7; i++)
+        {
+            DrawOpponentCard();
+        }
+    }
+    public void Pause()
+    {
+        if ((int)Turn_Manager.instance.currPlayer != PlayerTurnManager.instance.turn_id)
+        {
+            paused = true;
+        }
+        else
+        {
+            paused = false;
+        }
     }
 }

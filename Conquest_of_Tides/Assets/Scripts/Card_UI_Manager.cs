@@ -112,13 +112,13 @@ public class Card_UI_Manager : MonoBehaviour
         //set card image
         path = "temp_assets/CardImg/" + card.card_id.ToString();
         Card_Image.sprite = Resources.Load<Sprite>(path);
-        Card_Image.rectTransform.anchoredPosition = new Vector3(0.2405f, 77.64047f, 0f);
+        Card_Image.rectTransform.anchoredPosition = new Vector3(0, 150, 0);
         //set card back
         path = "temp_assets/Ship_type_" + (int)card.type;
         Card_Back.sprite = Resources.Load<Sprite>(path);
         //set card name
         Card_Name.text = card.name;
-        Card_Name.rectTransform.anchoredPosition = new Vector3(-9, 170.1299f, 0);
+        Card_Name.rectTransform.anchoredPosition = new Vector3(-18, 340f, 0);
         //set card hp
         if (Weather_Manager.instance != null)
             Card_HP.text = (card.hp-Weather_Manager.instance.decreased_hp).ToString() + "HP";
@@ -144,8 +144,8 @@ public class Card_UI_Manager : MonoBehaviour
         Move_1.SetActive(true);
         Move_Name_1.text = card.move_name_1;
         Move_Text_1.text = card.move_description_1;
-        Move_Text_1.rectTransform.anchoredPosition = new Vector3(-5.3f, -63.32768f, 0);
-        Move_Text_1.rectTransform.sizeDelta = new Vector2(229, 23.75f);
+        Move_Text_1.rectTransform.anchoredPosition = new Vector3(-10.6f, -126f, 0);
+        Move_Text_1.rectTransform.sizeDelta = new Vector2(460, 47.5f);
         if(Weather_Manager.instance != null)
             Move_Damage_1.text = (card.move_damage_1 - Weather_Manager.instance.move_damage_reduction).ToString();
         else
