@@ -79,4 +79,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LoadLevel(1);
     }
+    public void LoadChatScene()
+    {
+        PhotonNetwork.LoadLevel(5);
+    }
 }

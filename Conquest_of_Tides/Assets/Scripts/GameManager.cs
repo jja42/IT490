@@ -50,12 +50,15 @@ public class GameManager : MonoBehaviour
             Card_Manager.instance.GenerateDeck(player_deck);
             Card_Manager.instance.GenerateDeck(opponent_deck);
             generated = true;
-            //if(!Settings_Manager.instance.historical)
-            //   Weather_Manager.instance.GetData();
-            //else
-            //{
-            //    Weather_Manager.instance.GetHistoricalData(Settings_Manager.instance.historical_date);
-            //}
+            if (!Settings_Manager.instance.demo)
+            {
+                if (!Settings_Manager.instance.historical)
+                    Weather_Manager.instance.GetData();
+                else
+                {
+                    Weather_Manager.instance.GetHistoricalData(Settings_Manager.instance.historical_date);
+                }
+            }
         }
         if (attaching)
         {

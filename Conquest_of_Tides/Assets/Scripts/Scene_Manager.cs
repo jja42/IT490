@@ -17,6 +17,10 @@ public class Scene_Manager : MonoBehaviour
     {
         SceneManager.LoadScene(3);
     }
+    public void Demo()
+    {
+        SceneManager.LoadScene(4);
+    }
     public void ExitScene()
     {
         Application.Quit();

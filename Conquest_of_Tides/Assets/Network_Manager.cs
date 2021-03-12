@@ -35,6 +35,10 @@ public class Network_Manager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
         }
+        if (scene.buildIndex == 5)
+        {
+            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ChatManager"), Vector3.zero, Quaternion.identity);
+        }
     }
     // Update is called once per frame
     void Update()
