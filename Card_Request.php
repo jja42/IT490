@@ -15,16 +15,9 @@ else
 }
 
 $request = array();
-$request['type'] = "Login";
-$request['username'] = "steve";
-$request['password'] = "password";
-$request['message'] = $msg;
+$request['type'] = "inventory_output";
+$request['user'] =  $argv[1];
 $response = $client->send_request($request);
 //$response = $client->publish($request);
 
-echo "client received response: ".PHP_EOL;
 print_r($response);
-echo "\n\n";
-
-echo $argv[0]." END".PHP_EOL;
-

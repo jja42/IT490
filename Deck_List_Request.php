@@ -15,7 +15,8 @@ else
 }
 
 $request = array();
-$request['type'] = "api_output";
+$request['type'] = "deck_list_output";
+$request['user'] = (int)$argv[1];
 $response = $client->send_request($request);
 //$response = $client->publish($request);
 

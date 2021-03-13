@@ -15,7 +15,9 @@ else
 }
 
 $request = array();
-$request['type'] = "api_output";
+$request['type'] = "deck_output";
+$request['user'] = (int)$argv[1];
+$request['deck_name'] = $argv[2];
 $response = $client->send_request($request);
 //$response = $client->publish($request);
 
