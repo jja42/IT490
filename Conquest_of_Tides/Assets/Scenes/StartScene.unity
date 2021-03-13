@@ -1660,7 +1660,7 @@ MonoBehaviour:
   username: 
   password: 
   demo: 0
-  user_id: 3
+  user_id: 0
   deck_name: 
   historical_ui: {fileID: 35000117}
   historical_input: {fileID: 253606243}

@@ -162,12 +162,12 @@ public class Combat_Manager : MonoBehaviour
     }
     public void PrizeCard()
     {
-        GameManager.instance.paused = true;
+        //GameManager.instance.paused = true;
         Victory_UI.SetActive(true);
     }
     public void Lose()
     {
-        GameManager.instance.paused = true;
+        //GameManager.instance.paused = true;
         Loss_UI.SetActive(true);
     }
     public void ArrangeCounters(GameObject obj)
