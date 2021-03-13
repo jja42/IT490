@@ -6,14 +6,14 @@
 
   $client = new rabbitMQClient("testRabbitMQ.ini", "testServer");
   
-  $id = $argv[1];
+  $username = $argv[1];
 
   //echo "Here" . $id;
 
   
   $request = array();
   $request["type"] = "match_history";
-  $request["id"] = $id;
+  $request["id"] = $username;
 
   $response = $client->send_request($request);
 

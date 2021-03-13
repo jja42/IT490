@@ -15,9 +15,17 @@ Download
     </form>
   	<?php
   		session_start();
-			$id = $_SESSION["id"];
-  		$output = shell_exec("php rabbitmqphp_example/GetLeaderboard.php $id");
-			echo $output;
+			$username = $_SESSION["username"];
+  		$output = shell_exec("/usr/bin/php rabbitmqphp_example/GetLeaderboard.php $username");
+		echo $output;
+$table = "<table>";
+$table .=  "<tr><th>Game</th><th>Winner</th><th>Loser</th></tr>";
+for($i = 0; $i < count($output); $i++){
+	$t = $i + 1;
+	$table .= "<tr><td>$t</td><td>$output[$i][winner]</td><td>$output[$i][loser]</td></tr>";
+}
+$table .= "</table>";
+echo $table;
   	?>
 	</body>
 <html>
