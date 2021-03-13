@@ -1,21 +1,23 @@
 <?php
-if(isset($username) && isset($password) && isset($confirm)){
+if(isset($_POST["register"]))
+{
 	$password = $_POST["password"];
-	$confirm = $_POST["confirm"];
-	$username = $_POST["username"];
+        $confirm = $_POST["confirm"];
+        $username = $_POST["username"];
+	if(isset($username) && isset($password) && isset($confirm)){
 	if($password !== $confirm) echo("Passwords don't match");
 	else{
-		//TODO other validation as desired, remember this is the last line of defense
-		$hash = password_hash($password, PASSWORD_BCRYPT);
-		$output = shell_exec("php rabbitmqphp_example/Register.php $username $password");
-		echo $output;
+	    	//TODO other validation as desired, remember this is the last line of defense
+			$hash = password_hash($password, PASSWORD_BCRYPT);
+			$output = shell_exec("php rabbitmqphp_example/Register.php $username $password");
+			echo $output;
+		}
 	}
+
+	//safety measure to prevent php warnings
+	if(!isset($email)) $email = "";
+	if(!isset($username)) $username = "";
 }
-
-//safety measure to prevent php warnings
-if(!isset($email)) $email = "";
-if(!isset($username)) $username = "";
-
 ?>
 <form method="POST">
     <label for="user">Username:</label>
