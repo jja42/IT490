@@ -185,10 +185,10 @@ public class Card_Manager : MonoBehaviour
 
     public void GenerateDeck(Deck deck)
     {
-        //for(int i = 0; i< 60; i++)
-        // {
-        //     deck.cards.Add(GetCardByID(Settings_Manager.instance.deck[i]));
-        // }
+        //for (int i = 0; i < 60; i++)
+        //{
+        //    deck.cards.Add(GetCardByID(Settings_Manager.instance.deck[i]));
+        //}
         for (int i = 0; i < Database_Manager.instance.Database.Count; i++)
         {
             deck.cards.Add(Database_Manager.instance.Database[i]);

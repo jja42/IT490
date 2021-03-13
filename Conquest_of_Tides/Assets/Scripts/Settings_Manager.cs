@@ -52,12 +52,11 @@ public class Settings_Manager : MonoBehaviour
         password = password_input.text;
         sign_in_ui.SetActive(false);
         StartCoroutine(WebRequest.instance.GetUserInfo(username,password));
-        //EnableDeckUI();
+        EnableDeckUI();
     }
     public void EnableDeckUI()
     {
         deck_ui.SetActive(true);
-        StartCoroutine(WebRequest.instance.GetDeckList(user_id, false));
     }
     public void SubmitDeck()
     {

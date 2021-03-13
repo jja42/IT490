@@ -29,7 +29,8 @@ public class Deck_Manager : MonoBehaviour
         list_offset = new Vector3(-275, 900, 0);
         x_offset = new Vector3(75, 0, 0);
         y_offset = new Vector3(0, -100, 0);
-        deck_card_offset = new Vector3(-35, 320, 0);
+        deck_card_offset = new Vector3(75, 320, 0);
+        deck_card_offset = new Vector3(75, 320, 0);
         Database_Manager.instance.GenerateDatabase();
         StartCoroutine(WebRequest.instance.GetDeckList(Settings_Manager.instance.user_id, true));
     }

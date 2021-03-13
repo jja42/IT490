@@ -143,7 +143,7 @@ public class Combat_Manager : MonoBehaviour
                 {
                     Destroy(player_active);
                     Lose();
-                    PlayerTurnManager.instance.Match(Settings_Manager.instance.user_id);
+                    PlayerTurnManager.instance.Match(Settings_Manager.instance.username);
                     player_active_damage_ui.text = "Player Ship HP: ";
                 }
             }
@@ -153,7 +153,7 @@ public class Combat_Manager : MonoBehaviour
                 {
                 Destroy(player_active);
                 Lose();
-                PlayerTurnManager.instance.Match(Settings_Manager.instance.user_id);
+                PlayerTurnManager.instance.Match(Settings_Manager.instance.username);
                 player_active_damage_ui.text = "Player Ship HP: ";
                 }
             }

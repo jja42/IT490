@@ -14,7 +14,6 @@ public class WebRequest : MonoBehaviour
     {
         instance = this;
         intlist = new List<int>();
-        StartCoroutine(GetDeck("BestDeck", 2, true));
     }
     #region API
     public IEnumerator Historical_Api_Request(string date)
@@ -82,7 +81,7 @@ public class WebRequest : MonoBehaviour
     {
         intlist.Clear();
         strarr = str.Split('\n', '>');
-        for (int i = 10; i < 128; i+=2)
+        for (int i = 10; i < 129; i+=2)
             intlist.Add(int.Parse(strarr[i]));
         if (edit)
         {
@@ -166,8 +165,9 @@ public class WebRequest : MonoBehaviour
     {
         strarr = str.Split('\n', '>',' ');
         Settings_Manager.instance.user_id = int.Parse(strarr[12]);
+        StartCoroutine(GetDeckList(Settings_Manager.instance.user_id, false));
     }
-    public IEnumerator MatchHistory(int winner, int loser)
+    public IEnumerator MatchHistory(string winner, string loser)
     {
         postURL = "http://25.106.114.177/match_history.php";
         WWWForm form = new WWWForm();
