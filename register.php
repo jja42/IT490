@@ -3,7 +3,6 @@ if(isset($username) && isset($password) && isset($confirm)){
 	$password = $_POST["password"];
 	$confirm = $_POST["confirm"];
 	$username = $_POST["username"];
-	$isValid = true;
 	if($password !== $confirm) echo("Passwords don't match");
 	else{
 	    //TODO other validation as desired, remember this is the last line of defense
@@ -18,7 +17,6 @@ if(!isset($email)) $email = "";
 if(!isset($username)) $username = "";
 
 ?>
-
 <form method="POST">
     <label for="user">Username:</label>
     <input type="text" maxlength="60" id="user" name="username" placeholder="Enter Username" value="<?php echo($username); ?>" required/>
