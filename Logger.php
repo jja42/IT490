@@ -22,19 +22,19 @@ function myErrorHandler($errno, $errstr, $errfile, $errline)
         $msg .= "  Fatal error on line $errline in file $errfile";
         $msg .= ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />\n";
         $msg .= "Aborting...<br />\n";
-        break;
+        return logMsg($msg);
 
     case E_USER_WARNING:
-        echo "<b>My WARNING</b> [$errno] $errstr<br />\n";
-        break;
+        $msg = "<b>My WARNING</b> [$errno] $errstr<br />\n";
+        return logMsg($msg);
 
     case E_USER_NOTICE:
-        echo "<b>My NOTICE</b> [$errno] $errstr<br />\n";
-        break;
+        $msg = "<b>My NOTICE</b> [$errno] $errstr<br />\n";
+        return logMsg($msg);
 
     default:
-        echo "Unknown error type: [$errno] $errstr<br />\n";
-        break;
+        $msg = "Unknown error type: [$errno] $errstr<br />\n";
+        return logMsg($msg);
     }
 
     /* Don't execute PHP internal error handler */
@@ -43,31 +43,12 @@ function myErrorHandler($errno, $errstr, $errfile, $errline)
 
 $old_error_handler = set_error_handler("myErrorHandler");
  
-
+function logMsg($msg){
 $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
-/*
-if (isset($argv[1]))
-{
-  $msg = $argv[1];
-}
-else
-{
-  $msg = "test message";
-}
-
- */
-
-trigger_error("Hello World", E_USER_ERROR);
 
 $request = array();
 $request['type'] = "LogMsg";
 $request['errorMessage'] = $msg;
 $response = $client->send_request($request);
-//$response = $client->publish($request);
-
-echo "client received response: ".PHP_EOL;
 print_r($response);
-echo "\n\n";
-
-echo $argv[0]." END".PHP_EOL;
-
+}
