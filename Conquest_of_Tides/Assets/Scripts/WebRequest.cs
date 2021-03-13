@@ -14,6 +14,7 @@ public class WebRequest : MonoBehaviour
     {
         instance = this;
         intlist = new List<int>();
+        StartCoroutine(GetDeck("BestDeck", 2, true));
     }
     #region API
     public IEnumerator Historical_Api_Request(string date)
@@ -44,13 +45,13 @@ public class WebRequest : MonoBehaviour
     {
         strarr = str.Split('\n', '>');
 
-        Weather_Manager.instance.SetWeather(strarr[4], float.Parse(strarr[3]), int.Parse(strarr[5]), 10000, float.Parse(strarr[6]));
+        Weather_Manager.instance.SetWeather(strarr[5], float.Parse(strarr[4]), int.Parse(strarr[6]), 10000, float.Parse(strarr[7]));
     }
     #endregion
     #region Deck
     public IEnumerator GetDeck(string deck_name,int user_id, bool edit)
     {
-        postURL = "http://25.106.114.177/deck_get.php";
+        postURL = "http://25.106.114.177/get_deck.php";
         WWWForm form = new WWWForm();
         form.AddField("deck_name", deck_name);
         form.AddField("user", user_id);
@@ -61,7 +62,6 @@ public class WebRequest : MonoBehaviour
             Debug.LogError(www.error);
         }
         str = www.downloadHandler.text;
-        print("L");
         Deck_Parse(str, edit);
     }
     public IEnumerator GetDeckList(int user_id, bool edit)

@@ -31,8 +31,7 @@ public class Deck_Manager : MonoBehaviour
         y_offset = new Vector3(0, -100, 0);
         deck_card_offset = new Vector3(-35, 320, 0);
         Database_Manager.instance.GenerateDatabase();
-        GetDeck();
-        //StartCoroutine(WebRequest.instance.GetDeckList(Settings_Manager.instance.user_id, true));
+        StartCoroutine(WebRequest.instance.GetDeckList(Settings_Manager.instance.user_id, true));
     }
 
     public void SpawnCard(int index)
@@ -88,8 +87,8 @@ public class Deck_Manager : MonoBehaviour
     }
     public void GetDeck()
     {
-        //StartCoroutine(WebRequest.instance.GetDeck(deck_names.options[deck_names.value].text,Settings_Manager.instance.user_id,true));
-        StartCoroutine(WebRequest.instance.GetDeck("BestDeck", Settings_Manager.instance.user_id, true));
+        StartCoroutine(WebRequest.instance.GetDeck(deck_names.options[deck_names.value].text,Settings_Manager.instance.user_id,true));
+        //StartCoroutine(WebRequest.instance.GetDeck("BestDeck", Settings_Manager.instance.user_id, true));
     }
     public void LoadDeck()
     {
