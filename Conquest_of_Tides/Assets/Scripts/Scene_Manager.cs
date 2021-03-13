@@ -11,7 +11,8 @@ public class Scene_Manager : MonoBehaviour
     }
     public void MainScene()
     {
-        SceneManager.LoadScene(2);
+        if(Settings_Manager.instance.deck.Count == 60)
+            SceneManager.LoadScene(2);
     }
     public void DeckEdit()
     {

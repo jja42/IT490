@@ -63,6 +63,15 @@ public class PlayerTurnManager : MonoBehaviour
     {
         PV.RPC("Attack", RpcTarget.Others, damage);
     }
+    public void Match (int id)
+    {
+        PV.RPC("MatchLog", RpcTarget.Others, id);
+    }
+    [PunRPC]
+    public void MatchLog(int opponent_id)
+    {
+        StartCoroutine(WebRequest.instance.MatchHistory(Settings_Manager.instance.user_id, opponent_id));
+    }
     [PunRPC]
     public void Reposition(int index)
     {
