@@ -57,7 +57,8 @@ public class Player_Input : MonoBehaviour
                         }
                         if (!GameManager.instance.active_set && !active && !bench)
                         {
-                            PlayerTurnManager.instance.SetActive(card_id);
+                            if(!Settings_Manager.instance.demo)
+                                PlayerTurnManager.instance.SetActive(card_id);
                             GameManager.instance.SetPlayerActiveZone(this.gameObject);
                             active = true;
                             GameManager.instance.player_hand.cards.Remove(this_card);
@@ -66,7 +67,8 @@ public class Player_Input : MonoBehaviour
                         {
                             if (!GameManager.instance.full_bench && !active && !bench)
                             {
-                                PlayerTurnManager.instance.SetBench(card_id);
+                                if (!Settings_Manager.instance.demo)
+                                    PlayerTurnManager.instance.SetBench(card_id);
                                 GameManager.instance.SetPlayerBench(this.gameObject);
                                 bench = true;
                                 GameManager.instance.player_hand.cards.Remove(this_card);

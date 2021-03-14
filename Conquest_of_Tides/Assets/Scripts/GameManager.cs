@@ -47,6 +47,10 @@ public class GameManager : MonoBehaviour
             opponent_deck = new Card_Manager.Deck(2,"opponent_deck");
             opponent_hand = new Card_Manager.Hand(2);
             Database_Manager.instance.GenerateDatabase();
+            if (Settings_Manager.instance.demo)
+            {
+                Database_Manager.instance.GenerateTestDeck();
+            }
             Card_Manager.instance.GenerateDeck(player_deck);
             Card_Manager.instance.GenerateDeck(opponent_deck);
             generated = true;
@@ -154,35 +158,84 @@ public class GameManager : MonoBehaviour
             str += "-" + (int)Fortification.GetComponent<Player_Input>().this_card.type;
         Ship.GetComponent<Player_Input>().attached_fortifications += str;
         if(Ship.GetComponent<Player_Input>().active)
-            PlayerTurnManager.instance.AttachFortificationActive(Fortification.GetComponent<Player_Input>().card_id);
+            if (!Settings_Manager.instance.demo)
+                PlayerTurnManager.instance.AttachFortificationActive(Fortification.GetComponent<Player_Input>().card_id);
         if (Ship.GetComponent<Player_Input>().bench)
         {
             int index = Ship.transform.GetSiblingIndex();
-            PlayerTurnManager.instance.AttachFortificationBench(Fortification.GetComponent<Player_Input>().card_id,index);
+            if (!Settings_Manager.instance.demo)
+                PlayerTurnManager.instance.AttachFortificationBench(Fortification.GetComponent<Player_Input>().card_id,index);
         }
         General_UI_Manager.instance.AttachFortification(Fortification,Ship);
     }
     public void DeckButton()
     {
-        if (!paused && (int)Turn_Manager.instance.currPlayer == PlayerTurnManager.instance.turn_id)
+        if (!Settings_Manager.instance.demo)
         {
-            if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+            if (!paused && (int)Turn_Manager.instance.currPlayer == PlayerTurnManager.instance.turn_id)
             {
-                if (Weather_Manager.instance.double_draw)
+                if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
                 {
-                    DrawCard();
+                    can_attach = true;
+                    can_retreat = true;
+                    if (Weather_Manager.instance.double_draw)
+                    {
+                        DrawCard();
+                        DrawCard();
+                        Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
+                        Turn_Manager.instance.SetState(2);
+                        PlayerTurnManager.instance.SetTurnPhase(2);
+                        return;
+                    }
                     DrawCard();
                     Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
                     Turn_Manager.instance.SetState(2);
                     PlayerTurnManager.instance.SetTurnPhase(2);
                     return;
                 }
+                if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
+                {
+                    can_attack = true;
+                    Turn_Manager.instance.currState = Turn_Manager.TurnState.Combat;
+                    Turn_Manager.instance.SetState(3);
+                    PlayerTurnManager.instance.SetTurnPhase(3);
+                    return;
+                }
+                if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
+                {
+                    Turn_Manager.instance.currState = Turn_Manager.TurnState.End;
+                    Turn_Manager.instance.SetState(4);
+                    PlayerTurnManager.instance.SetTurnPhase(4);
+                    return;
+                }
+                if (Turn_Manager.instance.currState == Turn_Manager.TurnState.End)
+                {
+                    can_draw = true;
+                    Combat_Manager.instance.Storm();
+                    Turn_Manager.instance.currState = Turn_Manager.TurnState.Draw;
+                    Turn_Manager.instance.SetState(1);
+                    PlayerTurnManager.instance.SetTurnPhase(1);
+                    Turn_Manager.instance.SwitchTurn();
+                }
+            }
+        }
+        else
+        {
+            if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Draw)
+            {
                 can_attach = true;
                 can_retreat = true;
+                if (Weather_Manager.instance.double_draw)
+                {
+                    DrawCard();
+                    DrawCard();
+                    Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
+                    Turn_Manager.instance.SetState(2);
+                    return;
+                }
                 DrawCard();
                 Turn_Manager.instance.currState = Turn_Manager.TurnState.Main;
                 Turn_Manager.instance.SetState(2);
-                PlayerTurnManager.instance.SetTurnPhase(2);
                 return;
             }
             if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Main)
@@ -190,24 +243,20 @@ public class GameManager : MonoBehaviour
                 can_attack = true;
                 Turn_Manager.instance.currState = Turn_Manager.TurnState.Combat;
                 Turn_Manager.instance.SetState(3);
-                PlayerTurnManager.instance.SetTurnPhase(3);
                 return;
             }
             if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Combat)
             {
                 Turn_Manager.instance.currState = Turn_Manager.TurnState.End;
                 Turn_Manager.instance.SetState(4);
-                PlayerTurnManager.instance.SetTurnPhase(4);
                 return;
             }
-            if(Turn_Manager.instance.currState == Turn_Manager.TurnState.End)
+            if (Turn_Manager.instance.currState == Turn_Manager.TurnState.End)
             {
                 can_draw = true;
                 Combat_Manager.instance.Storm();
                 Turn_Manager.instance.currState = Turn_Manager.TurnState.Draw;
                 Turn_Manager.instance.SetState(1);
-                PlayerTurnManager.instance.SetTurnPhase(1);
-                Turn_Manager.instance.SwitchTurn();
             }
         }
     }
@@ -219,7 +268,8 @@ public class GameManager : MonoBehaviour
     {
         can_retreat = false;
         int index = BenchShip.transform.GetSiblingIndex();
-        PlayerTurnManager.instance.RepositionShips(index);
+        if (!Settings_Manager.instance.demo)
+            PlayerTurnManager.instance.RepositionShips(index);
         General_UI_Manager.instance.PlayerReposition(ActiveShip, BenchShip);
     }
     public void PlayerAttackResolve()

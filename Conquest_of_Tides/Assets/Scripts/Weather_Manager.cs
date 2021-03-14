@@ -214,7 +214,6 @@ public class Weather_Manager : MonoBehaviour
     public void EnableWeatherUI()
     {
         Weather_Popup.SetActive(true);
-        GameManager.instance.paused = true;
     }
     public void DisableWeatherUI()
     {
