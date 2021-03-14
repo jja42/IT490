@@ -16,13 +16,18 @@ Download
   	<?php
   		session_start();
 			$username = $_SESSION["username"];
-  		$output = shell_exec("/usr/bin/php rabbitmqphp_example/GetLeaderboard.php $username");
-		echo $output;
+  		$output = shell_exec("php rabbitmqphp_example/GetLeaderboard.php $username");
+  		//parse_str($output, $op);
+  		//print_r($op);
+  		$op = explode(" ", $output);
+		//echo $output;
 $table = "<table>";
 $table .=  "<tr><th>Game</th><th>Winner</th><th>Loser</th></tr>";
-for($i = 0; $i < count($output); $i++){
+$a = 0;
+for($i = 0; $i < count($op) - 1; $i+=2){
 	$t = $i + 1;
-	$table .= "<tr><td>$t</td><td>$output[$i][winner]</td><td>$output[$i][loser]</td></tr>";
+	$a++;
+	$table .= "<tr><td>$a</td><td>$op[$i]</td><td>$op[$t]</td></tr>";
 }
 $table .= "</table>";
 echo $table;
