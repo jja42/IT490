@@ -7,7 +7,7 @@ require_once('Logger.php');
 
 $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 $request = array();
-$request['type'] = "match";
+$request['type'] = "match_input";
 $request['winner'] = $argv[1];
 $request['loser'] = $argv[2];
 $response = $client->send_request($request);
