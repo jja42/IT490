@@ -1,8 +1,76 @@
 <b>My ERROR</b> [256] Hello World<br />
-  Fatal error on line 57 in file /home/diogocardoso/git/IT490/Logger.php, PHP 7.4.3 (Linux)<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
 Aborting...<br />
 
 <b>My ERROR</b> [256] Hello World<br />
-  Fatal error on line 60 in file /home/diogocardoso/git/IT490/Logger.php, PHP 7.4.3 (Linux)<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
 Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 60 in file /var/www/game_domain/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 60 in file /var/www/game_domain/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 60 in file /var/www/game_domain/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 60 in file /var/www/game_domain/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 60 in file /home/jja42/git/IT490/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 60 in file /home/jja42/git/IT490/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+Unknown error type: [8] Undefined offset: 2<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+<b>My ERROR</b> [256] Hello World<br />
+  Fatal error on line 59 in file /var/www/IT490Website/pages/rabbitmqphp_example/Logger.php, PHP 7.4.3 (Linux)<br />
+Aborting...<br />
+
+Unknown error type: [8] Undefined offset: 1<br />
+
+Unknown error type: [8] Undefined offset: 1<br />
+
+Unknown error type: [8] Undefined offset: 1<br />
+
+Unknown error type: [8] Undefined offset: 1<br />
+
+Unknown error type: [8] Undefined offset: 1<br />
 
