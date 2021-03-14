@@ -265,8 +265,15 @@ function match_output($id)
   $stmt->execute();
 
   $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  return $result;
+  //return $result;
+  $op = "";
+  for($i = 0; $i < count($result); $i++)
+  {
+	  $op .= $result[$i]['winner'] . " " . $result[$i]['loser'] . " ";
+  }
 
+  return $op;
+  
 } catch(PDOException $e) {
   echo "Error: " .$e->getMessage();
 }
