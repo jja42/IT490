@@ -876,9 +876,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 508435331}
-        m_TargetAssemblyTypeName: Scene_Manager, Assembly-CSharp
-        m_MethodName: DeckEdit
+      - m_Target: {fileID: 570806617}
+        m_TargetAssemblyTypeName: Settings_Manager, Assembly-CSharp
+        m_MethodName: Demo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1660,7 +1660,7 @@ MonoBehaviour:
   username: 
   password: 
   demo: 0
-  user_id: 3
+  user_id: 0
   deck_name: 
   historical_ui: {fileID: 35000117}
   historical_input: {fileID: 253606243}
