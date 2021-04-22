@@ -13,4 +13,4 @@ done
 package=$package_name'_'$version_num.tgz
 tar -zcvf $package_path'/'$package $package_path
 
-#scp $package_path'/'$package joao-dev@25.89.104.232:~/Downloads
+scp $package_path'/'$package it490-deployment@25.5.217.132:~/Packages
