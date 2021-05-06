@@ -6,47 +6,33 @@ using UnityEngine.UI;
 public class Deck_Manager : MonoBehaviour
 {
     public static Deck_Manager instance;
-    public Transform card_list;
     public Transform deck_list;
     public GameObject card_prefab;
-    Vector3 list_offset;
-    Vector3 x_offset;
-    Vector3 y_offset;
-    public Vector3 deck_offset;
-    Vector3 deck_card_offset;
+    float x_offset;
+    float y_offset;
+    Vector2 deck_offset;
     public List<GameObject> deck;
     public List<int> deck_cards;
+    public Dictionary<int,int> cardDict;
     public List<string> deck_name_list;
     GameObject obj;
-    public List<int> player_cards;
     public Dropdown deck_names;
     public InputField deck_name;
+    public GameObject ImportExportMenu;
+    public InputField exportField;
+    public InputField importField;
     public void Start()
     {
         instance = this;
         deck_cards = new List<int>();
         deck = new List<GameObject>();
-        list_offset = new Vector3(-275, 900, 0);
-        x_offset = new Vector3(75, 0, 0);
-        y_offset = new Vector3(0, -100, 0);
-        deck_card_offset = new Vector3(75, 320, 0);
-        deck_card_offset = new Vector3(75, 320, 0);
+        x_offset = 160;
+        y_offset =-210;
         Database_Manager.instance.GenerateDatabase();
-        StartCoroutine(WebRequest.instance.GetDeckList(Settings_Manager.instance.user_id, true));
+        //StartCoroutine(WebRequest.instance.GetDeckList(Settings_Manager.instance.user_id, true));
+        cardDict = new Dictionary<int, int>();
     }
 
-    public void SpawnCard(int index)
-    {
-        obj = Instantiate(card_prefab, card_list);
-        obj.GetComponent<Deck_Input>().card_id = player_cards[index];
-        list_offset += x_offset;
-        if (list_offset.x > 225)
-        {
-            list_offset -= (x_offset * 6);
-            list_offset += y_offset;
-        }
-        obj.transform.position += list_offset;
-    }
     public void AddCard(int card_id)
     {
         deck_cards.Add(card_id);
@@ -62,24 +48,21 @@ public class Deck_Manager : MonoBehaviour
         obj.GetComponent<Deck_Input>().card_id = card_id;
         obj.GetComponent<Deck_Input>().in_deck = true;
         deck.Add(obj);
-        ArrangeDeck();
     }
     public void ArrangeDeck()
     {
-        deck_offset = new Vector3(0, 0, 0);
-        for (int index = 0; index < deck_list.transform.childCount; index++)
+        for (int index = 0; index < deck.Count; index++)
         {
-            deck[index].transform.position = deck_card_offset;
-        }
-        for (int index = 0; index < deck_list.transform.childCount; index++)
-        {
-            deck_offset += x_offset;
-            if (deck_offset.x > 400)
+            RectTransform rectTransform = deck[index].GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector3(-320, 1050, 0);
+            deck_offset = new Vector2(x_offset, 0);
+            deck_offset *= index;
+            while (deck_offset.x > 640)
             {
-                deck_offset -= (x_offset * 5);
-                deck_offset += y_offset;
+                deck_offset.x -= (x_offset * 5);
+                deck_offset.y += y_offset;
             }
-            deck[index].transform.position += deck_offset;
+           rectTransform.anchoredPosition += deck_offset;
         }
     }
     public void GetCards()
@@ -97,6 +80,15 @@ public class Deck_Manager : MonoBehaviour
         {
             LoadCard(deck_cards[i]);
         }
+        ArrangeDeck();
+    }
+    public void Clear()
+    {
+        foreach (GameObject card in deck)
+        {
+            Destroy(card);
+        }
+        deck.Clear();
     }
     public void RemoveCard(GameObject card_obj,int card_id)
     {
@@ -117,4 +109,55 @@ public class Deck_Manager : MonoBehaviour
         }
         StartCoroutine(WebRequest.instance.SendDeck(deck_cards, deck_name.text,Settings_Manager.instance.user_id));
     }
+    public void ImportExport()
+    {
+        ImportExportMenu.SetActive(!ImportExportMenu.activeSelf);
+    }
+
+    public void Export()
+    {
+        cardDict.Clear();
+        foreach(int val in deck_cards)
+        {
+            if (!cardDict.ContainsKey(val))
+            {
+                cardDict.Add(val, 1001);
+            }
+            else {
+                cardDict[val] += 1;
+            }
+        }
+        exportField.text = "";
+        foreach(KeyValuePair<int, int> entry in cardDict)
+        {
+            char c = (char)entry.Key;
+            char r = (char)entry.Value;
+            exportField.text += c + "" + r; 
+        }
+    }
+    public void Copy()
+    {
+        GUIUtility.systemCopyBuffer = exportField.text;
+    }
+    public void Paste()
+    {
+        importField.text = GUIUtility.systemCopyBuffer;
+    }
+
+    public void Import()
+    {
+        deck_cards.Clear();
+        for (int i =0; i < importField.text.Length; i += 2)
+        {
+            int j = importField.text[i];
+            int k = importField.text[i + 1];
+            k = k - 1000;
+            for(int z = 0; z<k; z++)
+            {
+                deck_cards.Add(j);
+            }
+        }
+        LoadDeck();
+    }
+
 }
