@@ -30,4 +30,8 @@ public class Scene_Manager : MonoBehaviour
     {
         Application.Quit();
     }
+    public void TitleScene()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

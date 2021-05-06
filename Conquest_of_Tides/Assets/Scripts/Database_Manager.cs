@@ -43,7 +43,7 @@ public class Database_Manager : MonoBehaviour
             new Card_Manager.Card(2001,"Ironclad_Fortification",Card_Manager.CardType.Fortification,Card_Manager.Type.Ironclad,80,"test_ability","test description for ability","move 1","Move 1 description",40,"1100","move 2","move 2 description",20,"3000","0-0-0-0","flavor text LMAO"),
             new Card_Manager.Card(2002,"Battleship_Fortification",Card_Manager.CardType.Fortification,Card_Manager.Type.Battleship,80,"test_ability","test description for ability","move 1","Move 1 description",40,"1100","move 2","move 2 description",20,"3000","0-0-0-0","flavor text LMAO"),
             new Card_Manager.Card(2003,"Galleon_Fortification",Card_Manager.CardType.Fortification,Card_Manager.Type.Galleon,80,"test_ability","test description for ability","move 1","Move 1 description",40,"1100","move 2","move 2 description",20,"3000","0-0-0-0","flavor text LMAO"),
-            new Card_Manager.Card(2006,"Submarine_Fortification",Card_Manager.CardType.Fortification,Card_Manager.Type.Submarine,80,"test_ability","test description for ability","move 1","Move 1 description",40,"1100","move 2","move 2 description",20,"3000","0-0-0-0","flavor text LMAO")
+            new Card_Manager.Card(2004,"Submarine_Fortification",Card_Manager.CardType.Fortification,Card_Manager.Type.Submarine,80,"test_ability","test description for ability","move 1","Move 1 description",40,"1100","move 2","move 2 description",20,"3000","0-0-0-0","flavor text LMAO")
         };
     }
     public void GenerateTestDeck()
