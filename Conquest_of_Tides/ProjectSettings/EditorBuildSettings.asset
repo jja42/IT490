@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Chat.unity
     guid: 947c04f30c76f8b46832a9e0cefdc83a
+  - enabled: 1
+    path: Assets/Scenes/TutorialScene.unity
+    guid: 7bb9dea4350a15448ac0836637587f06
   m_configObjects: {}
