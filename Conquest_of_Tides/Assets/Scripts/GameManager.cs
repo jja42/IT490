@@ -86,9 +86,19 @@ public class GameManager : MonoBehaviour
         }
         if (Turn_Manager.instance.currState == Turn_Manager.TurnState.Start)
         {
-            for (int i = 0; i < 7; i++)
+            if (!Settings_Manager.instance.tutorial)
             {
-                DrawCard();
+                for (int i = 0; i < 7; i++)
+                {
+                    DrawCard();
+                }
+            }
+            else
+            {
+                Card_Manager.instance.AddtoHand(player_hand, "Ironclad_1");
+                Card_Manager.instance.AddtoHand(player_hand, "Ironclad_Fortification");
+                Card_Manager.instance.AddtoHand(player_hand, "Galleon_1");
+                General_UI_Manager.instance.ArrangePlayerHand(player_hand);
             }
             OpponentStart();
             can_attach = true;
