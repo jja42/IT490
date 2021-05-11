@@ -11,6 +11,7 @@ public class Settings_Manager : MonoBehaviour
     public string username;
     public string password;
     public bool demo;
+    public bool tutorial;
     public int user_id;
     public string deck_name;
     public GameObject historical_ui;
@@ -45,6 +46,10 @@ public class Settings_Manager : MonoBehaviour
     public void Demo()
     {
         demo = true;
+    }
+    public void Tutorial()
+    {
+        tutorial = true;
     }
     public void SubmitUserData()
     {
