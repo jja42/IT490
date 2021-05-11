@@ -22,8 +22,16 @@ public class Scene_Manager : MonoBehaviour
     {
         SceneManager.LoadScene(4);
     }
+    public void Tutorial()
+    {
+        SceneManager.LoadScene(6);
+    }
     public void ExitScene()
     {
         Application.Quit();
+    }
+    public void TitleScene()
+    {
+        SceneManager.LoadScene(0);
     }
 }

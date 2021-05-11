@@ -102,6 +102,13 @@ public class Card_Manager : MonoBehaviour
         Card card = Database_Manager.instance.GetCard(card_id);
         return card;
     }
+
+    public int GetIDByName(string Name)
+    {
+        int ID = Database_Manager.instance.GetID(Name);
+        return ID;
+    }
+
     public Type Get_Weakness(Type type)
     {
         switch (type)
@@ -168,6 +175,16 @@ public class Card_Manager : MonoBehaviour
         obj.GetComponent<Player_Input>().card_id = deck.cards[0].card_id;
         deck.cards.RemoveAt(0);
         }
+    }
+
+    public void AddtoHand(Hand hand, string name)
+    {
+        int card_id = GetIDByName(name);
+        hand.cards.Add(GetCardByID(card_id));
+        path = "temp_prefabs/Card";
+        GameObject obj = Resources.Load<GameObject>(path);
+        Instantiate(obj, General_UI_Manager.instance.Player_Hand.transform).GetComponent<Player_Input>().owner = 1;
+        obj.GetComponent<Player_Input>().card_id = card_id;
     }
 
     public void DrawfromOpponentDeck(Deck deck, Hand hand)
