@@ -22,18 +22,26 @@ function myErrorHandler($errno, $errstr, $errfile, $errline)
         $msg .= "  Fatal error on line $errline in file $errfile";
         $msg .= ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />\n";
         $msg .= "Aborting...<br />\n";
+	$msg.="\n";
+	file_put_contents('logfile', $msg, FILE_APPEND);
         return logMsg($msg);
 
     case E_USER_WARNING:
         $msg = "<b>My WARNING</b> [$errno] $errstr<br />\n";
+	$msg.="\n";
+	file_put_contents('logfile', $msg, FILE_APPEND);
         return logMsg($msg);
 
     case E_USER_NOTICE:
         $msg = "<b>My NOTICE</b> [$errno] $errstr<br />\n";
+	$msg.="\n";
+	file_put_contents('logfile', $msg, FILE_APPEND);
         return logMsg($msg);
 
     default:
         $msg = "Unknown error type: [$errno] $errstr<br />\n";
+	$msg.="\n";
+	file_put_contents('logfile', $msg, FILE_APPEND);
         return logMsg($msg);
     }
 
