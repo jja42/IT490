@@ -23,7 +23,7 @@
     <form method="post">
 		<h2 class="text-center">Conquest of Tides</h2>
 		<div class="form-group">
-      <input type="submit" name="Download" value="Download" class="btn btn-primary btn-block"></button>
+		<p><a href="Conquest of Tides.zip">Download</a></p>
        </div>
       <div class="form-group">
       <input type="submit" name="Logout" value="Logout" class="btn btn-primary btn-block"></button>
