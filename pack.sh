@@ -3,7 +3,7 @@
 #setup path for package
 package_name=$1
 version_num=$2
-package_path="packages/$package_name/$version_num"
+package_path="packages/$package_name/$package_name-$version_num"
 
 #check if version exists already
 if  [ -d "$package_path" ]; then
