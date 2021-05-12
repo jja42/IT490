@@ -8,9 +8,8 @@ if(isset($_POST["register"]))
 	if($password !== $confirm) echo("Passwords don't match");
 	else
 	{
-			$hash = password_hash($password, PASSWORD_BCRYPT);
-			$output = shell_exec("php rabbitmqphp_example/Register.php $username $hash");
-			echo $output;
+			$hashed_password = password_hash($password, PASSWORD_BCRYPT);
+			$output = shell_exec("php rabbitmqphp_example/Register.php $username $hashed_password");
 		}
 	}
 
