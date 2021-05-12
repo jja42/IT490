@@ -4,6 +4,7 @@
 package_name=$1
 version_num=$2
 package_path="packages/$package_name/$package_name-$version_num"
+file_path=$3
 
 #check if version exists already
 if  [ -d "$package_path" ]; then
@@ -14,12 +15,8 @@ fi
 #create directory for package and temp directory for files
 mkdir -p "$package_path/files"
 
-#parse args for files to be added and copy them to the temp directory
-argc=$#
-argv=("$@")
-for ((i=2;i<$argc;i++)); do
-	cp -r ${argv[$i]} "$package_path/files"
-done
+#copy files to the temp directory
+cp "$file_path/*" "$package_path/files"
 
 #setup package and zip it
 package=$package_name'_'$version_num.tgz
