@@ -5,8 +5,7 @@
 package_dest=$3
 package_name=$1
 version_num=$2
-package_path="Packages/$package_name-$version_num"
-package=$package_name'_'$version_num.tgz
+package_path="Packages/$package_name"_"$version_num.tgz"
 
 #determine ip to send to
 case $package_dest in
@@ -38,9 +37,11 @@ case $package_dest in
 		;;
 esac
 
-#echo sending $package_path'/'$package to $target @ $ip_addr;
+echo sending $package_path to $target @ $ip_addr;
 
-sshpass -p "it490dev" scp $package_path'/'$package joao-dev@25.89.104.232:~/Packages
+sshpass -p "it490dev" scp $package_path $target@$ip_addr:~/git/IT490/Packages
+
+ssh $target@$ip_addr "bash -s"i -- < /home/$target/git/IT490/unpack.sh /home/$target/git/IT490/Packages/$package_path
 
 #source <(grep dest deploy.ini)
 #echo $dest
