@@ -1,0 +1,15 @@
+[Unit]
+Description=Rabbit Server Script
+After=mysqld.target 
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=diogocardoso
+ExecStart=/usr/bin/env php /home/diogocardoso/git/IT490/testRabbitMQServer2.php
+
+[Install]
+WantedBy=multi-user.target
+
