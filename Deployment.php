@@ -4,12 +4,10 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
-function doLogin($username,$password)
+function DeploytoMachine($package,$machine)
 {
-    // lookup username in databas
-    // check password
-    return true;
-    //return false if not valid
+	shell_exec("./Deploy.sh $package $machine");
+	return("Complete");
 }
 
 function requestProcessor($request)
@@ -22,10 +20,8 @@ function requestProcessor($request)
   }
   switch ($request['type'])
   {
-    case "login":
-      return doLogin($request['username'],$request['password']);
-    case "validate_session":
-      return doValidate($request['sessionId']);
+    case "DeployTest":
+      return DeploytoMachine($request['package'],$request['machine']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
