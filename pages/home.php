@@ -7,11 +7,12 @@ if(isset($_POST["login"]))
 	{
 		$password = $_POST["password"];
 		$username = $_POST["username"];
+		$hash = password_hash($_POST["password"], PASSWORD_BCRYPT);
+		$username = $_POST["username"];
+		// send username and password to server
+		$hashed_password = password_hash($password, PASSWORD_BCRYPT);
+		$output = shell_exec("php rabbitmqphp_example/Login.php $username $hashed_password");
 	}
-	// send username and password to server
-	$hash = password_hash($password, PASSWORD_BCRYPT);
-	$output = shell_exec("php rabbitmqphp_example/Login.php $username $hash");
-	echo $output;
 }
 ?>
 <!DOCTYPE html>
