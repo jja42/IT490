@@ -200,6 +200,7 @@ class rabbitMQClient
       $params['login'] = $this->USER;
       $params['password'] = $this->PASSWORD;
       $params['vhost'] = $this->VHOST;
+      // $params['read_timeout'] = 5;
 
 			$conn = new AMQPConnection($params);
 			$conn->connect();
