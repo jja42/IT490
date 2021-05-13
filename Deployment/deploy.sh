@@ -17,7 +17,8 @@ case $package_dest in
 		ip_addr="0.0.0.0"
 		;;
 	API_QA)
-                ip_addr="0.0.0.0"
+		target="it490"
+                ip_addr="25.7.135.98"
                 ;;
 	FE_PD)
                 ip_addr="0.0.0.0"
@@ -26,7 +27,8 @@ case $package_dest in
                 ip_addr="0.0.0.0"
                 ;;
 	API_PD)
-                ip_addr="0.0.0.0"
+		target="it490-vm-3"
+                ip_addr="25.72.197.15"
                 ;;
 	TEST)
 		target="joao-dev"
@@ -48,7 +50,7 @@ sshpass -p $password ssh $target@$ip_addr mkdir /home/$target/git/IT490/$package
 
 sshpass -p $password ssh $target@$ip_addr mv files/ /home/$target/git/IT490/$package_name-$version_num
 
-sshpass -p $password ssh $target@$ip_addr /home/$target/git/IT490/$package_name-$version_num/files/install/install.sh
+sshpass -p $password ssh $target@$ip_addr  sudo -S "/home/$target/git/IT490/$package_name-$version_num/files/install/install.sh /home/$target/git/IT490/$package_name-$version_num/files/"
 
 #source <(grep dest deploy.ini)
 #echo $dest
