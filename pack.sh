@@ -12,18 +12,18 @@ if  [ -d "$package_path" ]; then
 	exit
 fi
 
-#create directory for package and temp directory for files
-mkdir -p "$package_path/files"
+#create directory for package
+mkdir -p $package_path
 
-#copy files to the temp directory
-cp "$file_path/*" "$package_path/files"
+#copy files to the directory
+cp -r $file_path $package_path
 
 #setup package and zip it
 package=$package_name'_'$version_num.tgz
-tar -zcvf $package_path'/'$package $package_path
+tar -zcvf $package_path'/'$package -C "$package_path/$file_path" .
 
 #copy package to deployment server
 scp $package_path'/'$package it490-deployment@25.5.217.132:~/git/IT490/Deployment/Packages
 
 #cleanup
-rm -r "$package_path/files"
+rm -r "$package_path/$file_path"
