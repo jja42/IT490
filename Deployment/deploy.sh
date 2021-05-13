@@ -11,24 +11,32 @@ package_path="Packages/$package_name"_"$version_num.tgz"
 case $package_dest in
 
 	FE_QA)
-		ip_addr="0.0.0.0"
+		target="alexxander"
+		ip_addr="25.70.254.189"
 		;;
 	DB_QA)
-		ip_addr="0.0.0.0"
+		target="diogocardoso"
+		ip_addr="25.88.192.231"
+		password="@Ubunutpass"
 		;;
-	API_QA)
+	API_PD)
 		target="it490"
                 ip_addr="25.7.135.98"
+		password="4947"
                 ;;
 	FE_PD)
-                ip_addr="0.0.0.0"
+		target="alexander"
+                ip_addr="25.70.254.189"
                 ;;
 	DB_PD)
-                ip_addr="0.0.0.0"
+		target="diogocardoso"
+                ip_addr="25.65.7.88"
+		password="@Ubuntupass"
                 ;;
-	API_PD)
+	API_QA)
 		target="it490-vm-3"
                 ip_addr="25.72.197.15"
+		password="4947"
                 ;;
 	TEST)
 		target="joao-dev"
@@ -50,7 +58,7 @@ sshpass -p $password ssh $target@$ip_addr mkdir /home/$target/git/IT490/$package
 
 sshpass -p $password ssh $target@$ip_addr mv files/ /home/$target/git/IT490/$package_name-$version_num
 
-sshpass -p $password ssh $target@$ip_addr  sudo -S "/home/$target/git/IT490/$package_name-$version_num/files/install/install.sh /home/$target/git/IT490/$package_name-$version_num/files/"
+sshpass -p $password ssh $target@$ip_addr  /home/$target/git/IT490/$package_name-$version_num/files/install/install.sh /home/$target/git/IT490/$package_name-$version_num/files/
 
 #source <(grep dest deploy.ini)
 #echo $dest
