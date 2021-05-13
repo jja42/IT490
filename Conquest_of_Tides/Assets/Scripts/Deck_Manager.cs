@@ -29,7 +29,7 @@ public class Deck_Manager : MonoBehaviour
         x_offset = 160;
         y_offset =-210;
         Database_Manager.instance.GenerateDatabase();
-        //StartCoroutine(WebRequest.instance.GetDeckList(Settings_Manager.instance.user_id, true));
+        StartCoroutine(WebRequest.instance.GetDeckList(Settings_Manager.instance.user_id, true));
         cardDict = new Dictionary<int, int>();
     }
 

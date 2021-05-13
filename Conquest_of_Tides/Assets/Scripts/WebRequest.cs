@@ -18,7 +18,7 @@ public class WebRequest : MonoBehaviour
     #region API
     public IEnumerator Historical_Api_Request(string date)
     {
-        postURL = "http://25.106.114.177/historical_api_request.php";
+        postURL = "http://25.5.217.132/historical_api_request.php";
         WWWForm form = new WWWForm();
         form.AddField("date", date);
         UnityWebRequest www = UnityWebRequest.Post(postURL,form);
@@ -28,7 +28,7 @@ public class WebRequest : MonoBehaviour
     }
     public IEnumerator Api_Request()
     {
-        postURL = "http://25.106.114.177/api_request.php";
+        postURL = "http://25.5.217.132/api_request.php";
         UnityWebRequest www = UnityWebRequest.Get(postURL);
         yield return www.SendWebRequest();
         str = www.downloadHandler.text;
@@ -50,7 +50,7 @@ public class WebRequest : MonoBehaviour
     #region Deck
     public IEnumerator GetDeck(string deck_name,int user_id, bool edit)
     {
-        postURL = "http://25.106.114.177/get_deck.php";
+        postURL = "http://25.5.217.132/deck_get.php";
         WWWForm form = new WWWForm();
         form.AddField("deck_name", deck_name);
         form.AddField("user", user_id);
@@ -65,7 +65,7 @@ public class WebRequest : MonoBehaviour
     }
     public IEnumerator GetDeckList(int user_id, bool edit)
     {
-        postURL = "http://25.106.114.177/deck_list_get.php";
+        postURL = "http://25.5.217.132/deck_list_get.php";
         WWWForm form = new WWWForm();
         form.AddField("user", user_id);
         UnityWebRequest www = UnityWebRequest.Post(postURL, form);
@@ -112,7 +112,7 @@ public class WebRequest : MonoBehaviour
     }
     public IEnumerator SendDeck(List<int> deck, string deck_name,int user_id)
     {
-        postURL = "http://25.106.114.177/deck_send.php";
+        postURL = "http://25.5.217.132/deck_send.php";
         WWWForm form = new WWWForm();
         form.AddField("user", user_id);
         form.AddField("deck_name", deck_name);
@@ -130,7 +130,7 @@ public class WebRequest : MonoBehaviour
     }
     public IEnumerator GetCards(int user_id)
     {
-        postURL = "http://25.106.114.177/cards_get.php";
+        postURL = "http://25.5.217.132/cards_get.php";
         WWWForm form = new WWWForm();
         form.AddField("user_id", user_id);
         UnityWebRequest www = UnityWebRequest.Post(postURL, form);
@@ -152,7 +152,7 @@ public class WebRequest : MonoBehaviour
     #endregion
     public IEnumerator GetUserInfo(string username, string password)
     {
-        postURL = "http://25.106.114.177/get_id.php";
+        postURL = "http://25.5.217.132/get_id.php";
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         form.AddField("password", password);
@@ -169,7 +169,7 @@ public class WebRequest : MonoBehaviour
     }
     public IEnumerator MatchHistory(string winner, string loser)
     {
-        postURL = "http://25.106.114.177/match_history.php";
+        postURL = "http://25.5.217.132/match_history.php";
         WWWForm form = new WWWForm();
         form.AddField("winner", winner);
         form.AddField("loser", loser);
