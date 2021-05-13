@@ -31,6 +31,7 @@ case $package_dest in
 	TEST)
 		target="joao-dev"
 		ip_addr="25.89.104.232"
+		password="it490dev"
 		;;
 	*)
 		echo "Invalid Target Location"
@@ -39,9 +40,15 @@ esac
 
 echo sending $package_path to $target @ $ip_addr;
 
-sshpass -p "it490dev" scp $package_path $target@$ip_addr:~/git/IT490/Packages
+sshpass -p $password scp $package_path $target@$ip_addr:~/git/IT490/Packages
 
-ssh $target@$ip_addr "bash -s"i -- < /home/$target/git/IT490/unpack.sh /home/$target/git/IT490/Packages/$package_path
+sshpass -p $password ssh $target@$ip_addr tar -xf /home/$target/git/IT490/$package_path
+
+sshpass -p $password ssh $target@$ip_addr mkdir /home/$target/git/IT490/$package_name-$version_num
+
+sshpass -p $password ssh $target@$ip_addr mv files/ /home/$target/git/IT490/$package_name-$version_num
+
+sshpass -p $password ssh $target@$ip_addr /home/$target/git/IT490/$package_name-$version_num/files/install/install.sh
 
 #source <(grep dest deploy.ini)
 #echo $dest
