@@ -5,8 +5,8 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
 $servername="localhost";
-$username="debian-sys-maint";
-$password="KYUz1lGwbC4UPwxV";
+$username="root";
+$password="Passss1!";
 $dbname="gamedb";
 
 
@@ -157,7 +157,7 @@ function user_inserts($user, $pass)
 
 global $servername, $dbname, $username, $password;
 
-$sql = "INSERT INTO users (password, username) VALUES ($pass, $user)";
+$sql = "INSERT INTO users (password, username) VALUES ('$pass', '$user')";
 	try {
   $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
   // set the PDO error mode to exception
@@ -180,10 +180,20 @@ function user_output($user, $pass)
   $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
   // set the PDO error mode to exception
   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $stmt = $conn->prepare("SELECT id FROM users WHERE username = '$user' AND password = '$pass'");
+  $stmt = $conn->prepare("SELECT password FROM users WHERE username = '$user'");
   $stmt->execute();
 
   $result = $stmt->fetch(PDO::FETCH_ASSOC);
+  $hashed_pass = $result["password"];
+
+  if(password_verify($pass, $hashed_pass))
+  {
+	  echo "here";
+	  $stmt = $conn->prepare("SELECT id FROM users WHERE username = '$user'");
+	$stmt->execute();
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  }
   return $result;
 } catch(PDOException $e) {
   echo "Error: " .$e->getMessage();
