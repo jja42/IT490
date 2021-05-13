@@ -1480,7 +1480,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508435328}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: afd3ba341a8084b40b617eb7e7d9bd82, type: 3}
@@ -1769,6 +1769,7 @@ MonoBehaviour:
   username: 
   password: 
   demo: 0
+  tutorial: 0
   user_id: 0
   deck_name: 
   historical_ui: {fileID: 35000117}
