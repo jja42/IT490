@@ -7,7 +7,7 @@ require_once('rabbitMQLib.inc');
 
 $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 
-$env_path = "/home/it490/git/IT490/.env";
+$env_path = ".env";
 
 // API Section:
 $myfile = fopen($env_path, "r") or die("Unable to open file!");

@@ -5,13 +5,17 @@ if(isset($_POST["login"]))
 	$username = null;
 	if(isset($_POST["password"]) && isset($_POST["username"]))
 	{
+		// $hash = password_hash($_POST["password"], PASSWORD_BCRYPT);
+		$username = $_POST["username"];
 		$password = $_POST["password"];
-		$username = $_POST["username"];
-		$hash = password_hash($_POST["password"], PASSWORD_BCRYPT);
-		$username = $_POST["username"];
 		// send username and password to server
-		$hashed_password = password_hash($password, PASSWORD_BCRYPT);
-		$output = shell_exec("php rabbitmqphp_example/Login.php $username $hashed_password");
+		// $hashed_password = crypt($password, "IT490WebsiteSalt");
+		// $hashed_password = password_hash($_POST["password"], PASSWORD_BCRYPT);
+		$output = shell_exec("php rabbitmqphp_example/Login.php $username $password");
+		if($output){
+			$_SESSION["user_id"] = $output;
+			header("Location: gamepage.php");
+		}
 	}
 }
 ?>
